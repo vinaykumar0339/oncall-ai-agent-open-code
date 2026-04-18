@@ -37,6 +37,10 @@ permission:
     "pnpm *": allow
     "yarn *": allow
     "npx nx *": allow
+    "/Users/vinaykumar/vymo/android-base/gradlew *": allow
+    "adb *": allow
+    "emulator *": allow
+    "xcrun simctl *": allow
     "swift *": allow
     "xcodebuild *": allow
     "git commit *": deny

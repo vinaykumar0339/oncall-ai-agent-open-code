@@ -7,8 +7,6 @@ temperature: 0.1
 tools:
   atlassian_*: false
   bitbucket_*: false
-  mobile-next-mcp_*: false
-  appium-mcp_*: false
   maestro-mcp_*: true
   websearch: false
 permission:
@@ -37,8 +35,12 @@ permission:
     "yarn *": allow
     "npm *": allow
     "npx react-native *": allow
+    "/Users/vinaykumar/vymo/android-base/gradlew *": allow
+    "adb *": allow
+    "emulator *": allow
     "bundle exec pod *": allow
     "pod *": allow
+    "xcrun simctl *": allow
     "xcodebuild *": allow
     "swift *": allow
     "rm *": deny

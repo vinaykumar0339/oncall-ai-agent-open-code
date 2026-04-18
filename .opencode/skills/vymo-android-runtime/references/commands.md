@@ -13,7 +13,7 @@ Run these from `/Users/vinaykumar/vymo/android-base`.
 - Inspect available Gradle tasks first:
 
 ```sh
-./gradlew tasks
+/Users/vinaykumar/vymo/android-base/gradlew tasks
 ```
 
 - Prefer repo-documented assemble or bundle tasks for the requested flavor/build type.
@@ -24,11 +24,11 @@ Run these from `/Users/vinaykumar/vymo/android-base`.
 Documented examples from the repo README:
 
 ```sh
-./gradlew assembleVymo_2_0MasterFeature_testing
-./gradlew assembleVymo_2_0MasterRelease
-./gradlew bundleVymo_2_0MasterRelease
-./gradlew assembleAbcMasterRelease
-./gradlew bundleAbcMasterRelease
+/Users/vinaykumar/vymo/android-base/gradlew assembleVymo_2_0MasterFeature_testing
+/Users/vinaykumar/vymo/android-base/gradlew assembleVymo_2_0MasterRelease
+/Users/vinaykumar/vymo/android-base/gradlew bundleVymo_2_0MasterRelease
+/Users/vinaykumar/vymo/android-base/gradlew assembleAbcMasterRelease
+/Users/vinaykumar/vymo/android-base/gradlew bundleAbcMasterRelease
 ```
 
 ## Native Fallbacks
@@ -36,9 +36,9 @@ Documented examples from the repo README:
 If targeted native Android verification is required, inspect the workspace before choosing a command. Common fallbacks include:
 
 ```sh
-./gradlew tasks
-./gradlew :library:assembleDebug
-./gradlew :library:lint
+/Users/vinaykumar/vymo/android-base/gradlew tasks
+/Users/vinaykumar/vymo/android-base/gradlew :library:assembleDebug
+/Users/vinaykumar/vymo/android-base/gradlew :library:lint
 ```
 
 ## Architecture Clues

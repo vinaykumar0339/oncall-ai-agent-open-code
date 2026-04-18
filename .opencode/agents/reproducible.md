@@ -36,8 +36,12 @@ permission:
     "yarn *": allow
     "npm *": allow
     "npx react-native *": allow
+    "/Users/vinaykumar/vymo/android-base/gradlew *": allow
+    "adb *": allow
+    "emulator *": allow
     "bundle exec pod *": allow
     "pod *": allow
+    "xcrun simctl *": allow
     "xcodebuild *": allow
     "rm *": deny
   webfetch: deny

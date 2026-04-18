@@ -6,8 +6,6 @@ model: openai/gpt-5.3-codex
 temperature: 0.1
 tools:
   atlassian_*: true
-  mobile-next-mcp_*: false
-  appium-mcp_*: false
   maestro-mcp_*: false
   websearch: false
   skill: false
