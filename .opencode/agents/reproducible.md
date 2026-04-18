@@ -27,6 +27,12 @@ permission:
     "tail *": allow
     "ps *": allow
     "lsof *": allow
+    "mkdir tmp*": allow
+    "mkdir ./tmp*": allow
+    "mkdir -p tmp*": allow
+    "mkdir -p ./tmp*": allow
+    "mkdir /Users/vinaykumar/vymo/workiq/oncall-ai-agent-open-code/tmp*": allow
+    "mkdir -p /Users/vinaykumar/vymo/workiq/oncall-ai-agent-open-code/tmp*": allow
     "git status*": allow
     "git diff*": allow
     "git branch*": allow
@@ -73,6 +79,7 @@ Primary responsibilities:
 - If no explicit source branch is provided, default reproduction to the latest remote `master`.
 - If branch checkout is blocked by local changes, safely stash them with a descriptive message instead of forcing cleanup.
 - Use repo-local temp paths under `./tmp/{platform}/{opencodeSessionId}/...` for evidence, logs, and runtime artifacts.
+- Before writing any evidence, logs, or runtime files, create the session temp tree with `.opencode/skills/vymo-react-native-runtime/scripts/create-session-dirs.sh`.
 - If the issue is not reproducible, post a concise Jira comment with what was tested and why the current result looks healthy.
 - When a blocked or non-reproducible result needs a follow-up from a specific person, tag only a verified Jira user from the issue context, usually the reporter or the latest relevant commenter.
 - Never invent a tag or guess a user handle. If verified mention data is not available, ask using role-based wording instead.
@@ -80,6 +87,7 @@ Primary responsibilities:
 Tool usage policy:
 - Prefer element-tree and accessibility-first navigation over screenshot guessing.
 - Save screenshots or other evidence only under the repo-local session temp tree, typically `./tmp/{platform}/{opencodeSessionId}/evidence/...`.
+- Use the shared temp-dir helper so `logs/`, `evidence/`, `runtime/`, and `reports/` exist before writing artifacts.
 - Only use the shared Metro/runtime scripts for the React Native iOS workspace.
 - Do not assume Metro is required for the native Android repo.
 - When invoking shared runtime scripts for iOS work, set `PLATFORM=ios`, `OPENCODE_SESSION_ID`, and `APP_ROOT=/Users/vinaykumar/vymo/react-app`.

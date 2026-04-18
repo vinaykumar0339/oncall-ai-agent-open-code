@@ -35,6 +35,14 @@ Use these subfolders:
 - `runtime/` for pidfiles and service metadata
 - `reports/` for optional local handoff files
 
+Create them with the helper before writing artifacts:
+
+```sh
+export PLATFORM=ios
+export OPENCODE_SESSION_ID=<opencode-session-id>
+/Users/vinaykumar/vymo/workiq/oncall-ai-agent-open-code/.opencode/skills/vymo-react-native-runtime/scripts/create-session-dirs.sh
+```
+
 Export these variables before running the Metro helper scripts when possible:
 
 ```sh
@@ -59,6 +67,12 @@ export REPO_ROOT=/Users/vinaykumar/vymo/workiq/oncall-ai-agent-open-code
 Prefer the bundled helper scripts:
 
 ```sh
+/Users/vinaykumar/vymo/workiq/oncall-ai-agent-open-code/.opencode/skills/vymo-react-native-runtime/scripts/create-session-dirs.sh
+```
+
+Then:
+
+```sh
 /Users/vinaykumar/vymo/workiq/oncall-ai-agent-open-code/.opencode/skills/vymo-react-native-runtime/scripts/check-metro.sh
 ```
 
@@ -77,6 +91,7 @@ To stop it explicitly:
 The helper scripts manage:
 
 - session root: `./tmp/{platform}/{opencodeSessionId}/`
+- subdirectory creation for `logs/`, `evidence/`, `runtime/`, and `reports/`
 - React Native app root selection when `APP_ROOT` is unset
 - runtime pidfile: `./tmp/{platform}/{opencodeSessionId}/runtime/metro.pid`
 - runtime log: `./tmp/{platform}/{opencodeSessionId}/runtime/metro.log`

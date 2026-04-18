@@ -33,6 +33,12 @@ permission:
     "head *": allow
     "tail *": allow
     "wc *": allow
+    "mkdir tmp*": allow
+    "mkdir ./tmp*": allow
+    "mkdir -p tmp*": allow
+    "mkdir -p ./tmp*": allow
+    "mkdir /Users/vinaykumar/vymo/workiq/oncall-ai-agent-open-code/tmp*": allow
+    "mkdir -p /Users/vinaykumar/vymo/workiq/oncall-ai-agent-open-code/tmp*": allow
     "npm *": allow
     "pnpm *": allow
     "yarn *": allow
@@ -76,6 +82,7 @@ Primary responsibilities:
   - `ios` -> `/Users/vinaykumar/vymo/react-app`
   - `android` -> `/Users/vinaykumar/vymo/android-base`
 - Use repo-local temp paths under `./tmp/{platform}/{opencodeSessionId}/...` for any local evidence or logs created during verification.
+- Before writing any evidence, logs, or runtime files, create the session temp tree with `.opencode/skills/vymo-react-native-runtime/scripts/create-session-dirs.sh`.
 
 Built-in agent usage:
 - Follow this pattern:
@@ -92,6 +99,7 @@ Built-in agent usage:
 - Do not try to invoke built-in `build` or `plan`; they are primary agents for manual direct workflows, not subagents in this Jira workflow.
 - When invoking shared runtime scripts for iOS work, set `PLATFORM=ios`, `OPENCODE_SESSION_ID`, and `APP_ROOT=/Users/vinaykumar/vymo/react-app`.
 - Do not route native Android verification through the shared Metro scripts unless a future Android workspace actually adds a React Native runtime layer.
+- Use the shared temp-dir helper before generating repo-local logs, screenshots, or reports so artifact writes stay autonomous.
 
 Decision rules:
 - `FIX_APPLIED` means code changes were made and at least one targeted verification step passed or produced useful evidence.

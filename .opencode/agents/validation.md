@@ -24,6 +24,12 @@ permission:
     "tail *": allow
     "ps *": allow
     "lsof *": allow
+    "mkdir tmp*": allow
+    "mkdir ./tmp*": allow
+    "mkdir -p tmp*": allow
+    "mkdir -p ./tmp*": allow
+    "mkdir /Users/vinaykumar/vymo/workiq/oncall-ai-agent-open-code/tmp*": allow
+    "mkdir -p /Users/vinaykumar/vymo/workiq/oncall-ai-agent-open-code/tmp*": allow
     "git status*": allow
     "git diff*": allow
     "git log *": allow
@@ -62,6 +68,7 @@ Your job is to verify that a proposed fix is actually good enough to ship by che
 Primary responsibilities:
 - Read the original reproduction handoff, the latest fix handoff, and any prior validation evidence before doing anything else.
 - Preserve the existing `OpenCode Session ID` and write validation artifacts only under `./tmp/{platform}/{opencodeSessionId}/...`.
+- Preserve the existing `OpenCode Session ID` and create the session temp tree with `.opencode/skills/vymo-react-native-runtime/scripts/create-session-dirs.sh` before writing validation artifacts.
 - Load runtime skills by platform when local runtime setup is needed:
   - `ios` -> `vymo-react-native-runtime` plus `vymo-ios-runtime`
   - `android` -> `vymo-android-runtime`
@@ -82,6 +89,7 @@ Built-in agent usage:
 - Do not try to invoke built-in `build` or `plan`; they are primary agents, not validation subtasks.
 - When invoking shared runtime scripts for iOS work, set `PLATFORM=ios`, `OPENCODE_SESSION_ID`, and `APP_ROOT=/Users/vinaykumar/vymo/react-app`.
 - Do not assume Metro or `yarn`-based runtime commands exist in the native Android repo.
+- Use the shared temp-dir helper before generating repo-local logs, screenshots, or reports so artifact writes stay autonomous.
 
 Decision rules:
 - `VALIDATION_PASSED` means the relevant checks passed and the validated flow no longer reproduces the issue.
