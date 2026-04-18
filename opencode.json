@@ -52,18 +52,8 @@
       "enabled": true
     },
     "bitbucket": {
-      "type": "local",
-      "command": [
-        "node",
-        "/Users/vinaykumar/vymo/github/vymo/bitbucket-mcp/dist/index.js",
-        "--transport",
-        "stdio"
-      ],
-      "environment": {
-        "BITBUCKET_AUTH_MODE": "basic",
-        "BITBUCKET_BASE_URL": "https://api.bitbucket.org/2.0",
-        "BITBUCKET_WORKSPACE": "vymo"
-      },
+      "type": "remote",
+      "url": "http://localhost:3000/mcp",
       "enabled": true
     },
     "maestro-mcp": {
