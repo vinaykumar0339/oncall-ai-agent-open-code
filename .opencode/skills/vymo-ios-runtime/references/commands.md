@@ -23,12 +23,14 @@ Relevant package scripts:
 From the app root:
 
 ```sh
+export PLATFORM=ios
 yarn ios
 ```
 
 If local native state looks stale:
 
 ```sh
+export PLATFORM=ios
 yarn pod-install
 ```
 
@@ -43,6 +45,8 @@ yarn pod-install
 
 Whenever iOS runtime setup mattered, report:
 
+- platform
+- app root
 - app launch command
 - pod-install command if used
 - simulator/device context

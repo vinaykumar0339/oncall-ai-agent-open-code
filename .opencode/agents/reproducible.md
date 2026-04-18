@@ -59,8 +59,12 @@ Default workspace mapping:
 
 Primary responsibilities:
 - Read the triage handoff first and preserve its `OpenCode Session ID`.
-- Load `vymo-react-native-runtime` for all local runtime work.
-- Load `vymo-ios-runtime` for iOS work and `vymo-android-runtime` for Android work.
+- Load runtime skills by platform:
+  - `ios` -> `vymo-react-native-runtime` plus `vymo-ios-runtime`
+  - `android` -> `vymo-android-runtime`
+- Resolve the app root from platform before local runtime work:
+  - `ios` -> `/Users/vinaykumar/vymo/react-app`
+  - `android` -> `/Users/vinaykumar/vymo/android-base`
 - Use the branch named in the handoff when one is explicitly provided.
 - If no explicit source branch is provided, default reproduction to the latest remote `master`.
 - If branch checkout is blocked by local changes, safely stash them with a descriptive message instead of forcing cleanup.
@@ -72,7 +76,9 @@ Primary responsibilities:
 Tool usage policy:
 - Prefer element-tree and accessibility-first navigation over screenshot guessing.
 - Save screenshots or other evidence only under the repo-local session temp tree, typically `./tmp/{platform}/{opencodeSessionId}/evidence/...`.
-- If Metro or another long-running local service is needed, use the shared runtime scripts and make sure `PLATFORM` and `OPENCODE_SESSION_ID` are set before invoking them.
+- Only use the shared Metro/runtime scripts for the React Native iOS workspace.
+- Do not assume Metro is required for the native Android repo.
+- When invoking shared runtime scripts for iOS work, set `PLATFORM=ios`, `OPENCODE_SESSION_ID`, and `APP_ROOT=/Users/vinaykumar/vymo/react-app`.
 
 Output format:
 - `Status:` `REPRODUCED`, `NOT_REPRODUCIBLE`, or `BLOCKED`

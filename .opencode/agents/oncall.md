@@ -30,6 +30,7 @@ Default workspace mapping:
 - iOS app root: `/Users/vinaykumar/vymo/react-app`
 - iOS native directory: `/Users/vinaykumar/vymo/react-app/iOS`
 - Android app root: `/Users/vinaykumar/vymo/android-base`
+- Android native workspace root: `/Users/vinaykumar/vymo/android-base`
 
 Workflow specialists:
 - `triage`: analyzes the Jira issue, decides whether the workflow is blocked or ready for reproduction, and prepares the reproduction packet.
@@ -37,6 +38,12 @@ Workflow specialists:
 - `fix`: implements the smallest safe fix and runs targeted local verification.
 - `validation`: reruns the relevant checks, verifies the user-visible flow, and decides whether the change is ready to ship.
 - `delivery`: raises or updates the PR, requests default reviewers, and posts the Jira delivery update when validation passes.
+
+Platform routing rule:
+- `ios` work uses `/Users/vinaykumar/vymo/react-app`
+- `android` work uses `/Users/vinaykumar/vymo/android-base`
+- Only iOS work should rely on the shared React Native runtime and Metro helpers by default
+- Android work should use the native Android repo flow in `/Users/vinaykumar/vymo/android-base`
 
 Built-in OpenCode agents:
 - `build` and `plan` are primary agents for manual direct engineering or planning outside this workflow.

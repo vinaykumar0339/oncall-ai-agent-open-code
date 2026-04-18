@@ -23,10 +23,11 @@ This repository defines an end-to-end OpenCode workflow for an on-call mobile en
   - React Native iOS app root: `/Users/vinaykumar/vymo/react-app`
   - React Native iOS native dir: `/Users/vinaykumar/vymo/react-app/iOS`
   - Android app root: `/Users/vinaykumar/vymo/android-base`
+  - Android native workspace root: `/Users/vinaykumar/vymo/android-base`
 - Runtime skills are split by concern:
-  - `vymo-react-native-runtime` for shared React Native setup, Metro handling, temp-path rules, and reporting requirements
-  - `vymo-ios-runtime` for iOS-specific setup and launch behavior
-  - `vymo-android-runtime` for Android-specific setup and launch behavior
+  - `vymo-react-native-runtime` for the React Native workspace in `/Users/vinaykumar/vymo/react-app`, including Metro handling, temp-path rules, and reporting requirements
+  - `vymo-ios-runtime` for iOS-specific setup and launch behavior inside the React Native workspace
+  - `vymo-android-runtime` for the native Android workspace in `/Users/vinaykumar/vymo/android-base`
 
 ## Handoff Contract
 

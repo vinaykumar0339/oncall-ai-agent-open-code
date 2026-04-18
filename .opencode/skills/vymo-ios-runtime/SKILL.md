@@ -11,7 +11,7 @@ Load [references/commands.md](references/commands.md) before running iOS workspa
 
 ## Workflow
 
-1. Treat `/Users/vinaykumar/vymo/react-app` as the app root and `/Users/vinaykumar/vymo/react-app/iOS` as the native iOS directory.
+1. For iOS work, treat `/Users/vinaykumar/vymo/react-app` as the app root and `/Users/vinaykumar/vymo/react-app/iOS` as the native iOS directory.
 2. Prefer `yarn ios` for simulator launches from the app root.
 3. If iOS dependencies are stale or missing, use the repo pod-install script from the app root.
 4. If the app launches and closes immediately, verify shared runtime health before treating it as product behavior.
@@ -20,6 +20,7 @@ Load [references/commands.md](references/commands.md) before running iOS workspa
 ## iOS Rules
 
 - Native folder name is `iOS`, not `ios`.
+- When invoking shared Metro helper scripts during iOS work, set `PLATFORM=ios` so the shared runtime resolves the correct app root and temp paths.
 - Use `yarn pod-install` before retrying if native dependency state looks broken.
 - If direct native inspection is required, prefer the checked-in workspace and project clues from the command reference.
 - Stop and report a blocker if pods fail or if simulator launch fails for local environment reasons.

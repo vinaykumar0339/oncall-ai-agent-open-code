@@ -60,7 +60,12 @@ Your job is to verify that a proposed fix is actually good enough to ship by che
 Primary responsibilities:
 - Read the original reproduction handoff, the latest fix handoff, and any prior validation evidence before doing anything else.
 - Preserve the existing `OpenCode Session ID` and write validation artifacts only under `./tmp/{platform}/{opencodeSessionId}/...`.
-- Load `vymo-react-native-runtime` plus the platform-specific runtime skill when local runtime setup is needed.
+- Load runtime skills by platform when local runtime setup is needed:
+  - `ios` -> `vymo-react-native-runtime` plus `vymo-ios-runtime`
+  - `android` -> `vymo-android-runtime`
+- Resolve the app root from platform before local runtime work:
+  - `ios` -> `/Users/vinaykumar/vymo/react-app`
+  - `android` -> `/Users/vinaykumar/vymo/android-base`
 - Ensure validation runs on the intended fix branch, not on `main`, `master`, or a stale reproduction branch.
 - Preserve the validated branch provenance, including whether it came from latest remote `master` or an explicit bug/source branch hint.
 - If branch checkout is blocked by local changes, safely stash them with a descriptive message instead of forcing cleanup.
@@ -73,6 +78,8 @@ Built-in agent usage:
 - Keep `@explore` questions narrow and verification-oriented.
 - Do not use `@general` unless the workflow is explicitly redesigned later.
 - Do not try to invoke built-in `build` or `plan`; they are primary agents, not validation subtasks.
+- When invoking shared runtime scripts for iOS work, set `PLATFORM=ios`, `OPENCODE_SESSION_ID`, and `APP_ROOT=/Users/vinaykumar/vymo/react-app`.
+- Do not assume Metro or `yarn`-based runtime commands exist in the native Android repo.
 
 Decision rules:
 - `VALIDATION_PASSED` means the relevant checks passed and the validated flow no longer reproduces the issue.
