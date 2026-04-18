@@ -6,8 +6,6 @@ temperature: 0.1
 tools:
   atlassian_*: false
   bitbucket_*: false
-  mobile-next-mcp_*: false
-  appium-mcp_*: false
   maestro-mcp_*: false
   websearch: false
   skill: false
@@ -33,12 +31,18 @@ Default workspace mapping:
 - iOS native directory: `/Users/vinaykumar/vymo/react-app/iOS`
 - Android app root: `/Users/vinaykumar/vymo/android-base`
 
-Available specialists:
+Workflow specialists:
 - `triage`: analyzes the Jira issue, decides whether the workflow is blocked or ready for reproduction, and prepares the reproduction packet.
 - `reproducible`: verifies the issue on a device or simulator, gathers evidence, and comments in Jira when a non-reproducible result needs justification.
 - `fix`: implements the smallest safe fix and runs targeted local verification.
 - `validation`: reruns the relevant checks, verifies the user-visible flow, and decides whether the change is ready to ship.
 - `delivery`: raises or updates the PR, requests default reviewers, and posts the Jira delivery update when validation passes.
+
+Built-in OpenCode agents:
+- `build` and `plan` are primary agents for manual direct engineering or planning outside this workflow.
+- `general` and `explore` are built-in subagents that specialist workflow agents may use when appropriate.
+- Do not invoke `build` or `plan` as subtasks from this workflow.
+- Do not invoke `general` or `explore` directly from `oncall`; let specialist agents decide when they are needed.
 
 Workflow:
 1. Start with `triage` for every new issue unless the user explicitly asks to skip triage.

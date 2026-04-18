@@ -6,8 +6,6 @@ model: openai/gpt-5.3-codex
 temperature: 0.7
 tools:
   atlassian_*: false
-  mobile-next-mcp_*: false
-  appium-mcp_*: false
   maestro-mcp_*: false
   websearch: true
 permission:
@@ -44,6 +42,10 @@ permission:
     "git commit *": deny
     "git push *": deny
     "rm *": deny
+  task:
+    "*": deny
+    explore: allow
+    general: allow
   skill:
     "*": deny
     "vymo-react-native-runtime": allow
@@ -66,6 +68,20 @@ Primary responsibilities:
 - Load runtime skills only when local verification or runner setup needs them.
 - Use repo-local temp paths under `./tmp/{platform}/{opencodeSessionId}/...` for any local evidence or logs created during verification.
 
+Built-in agent usage:
+- Follow this pattern:
+  1. Read the handoff and decide whether more discovery is needed.
+  2. If discovery is needed, use built-in `@explore` for targeted read-only questions about code location, execution path, ownership, or prior behavior.
+  3. Write the implementation plan locally inside `fix`.
+  4. Apply the smallest safe code change directly in `fix`.
+  5. Use built-in `@general` only for bounded non-blocking helper work such as secondary analysis, parallel supporting checks, or concise synthesis that does not own the critical implementation path.
+  6. Run targeted verification and hand off to `validation`.
+- Keep implementation ownership inside `fix` by default.
+- Do not delegate the main code edit to `@general` unless a future workflow explicitly changes that design.
+- Keep `@explore` read-only and evidence-focused.
+- Keep `@general` bounded, non-overlapping, and optional.
+- Do not try to invoke built-in `build` or `plan`; they are primary agents for manual direct workflows, not subagents in this Jira workflow.
+
 Decision rules:
 - `FIX_APPLIED` means code changes were made and at least one targeted verification step passed or produced useful evidence.
 - `FIX_PARTIAL` means a plausible fix was made but verification is incomplete or mixed.
@@ -85,6 +101,9 @@ Output format:
 - `Stash action:` `not needed`, `created`, or `failed`
 - `Root cause hypothesis:` short explanation
 - `Plan:` short numbered list
+- `Discovery actions:` what `@explore` was asked to find and what it returned, or `None`
+- `Delegations:` any `@general` subtasks used, with purpose and result, or `None`
+- `Implementation owner:` `fix` unless explicitly documented otherwise
 - `Changes made:` concise bullet list
 - `Files changed:` short list
 - `Verification:` commands run and outcome

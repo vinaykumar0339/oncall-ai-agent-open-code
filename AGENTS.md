@@ -5,17 +5,20 @@ This repository defines an end-to-end OpenCode workflow for an on-call mobile en
 ## Workflow
 
 - `oncall` is the primary orchestrator. It delegates to `triage`, `reproducible`, `fix`, `validation`, and `delivery`.
+- `oncall` stays the default primary workflow agent for this repository.
 - Triage is mandatory unless the user explicitly asks to skip it.
 - Validation is a release gate. Do not treat a plausible fix as shippable until validation passes.
 - Delivery includes both the PR action and the Jira delivery comment. If the PR succeeds but the Jira delivery comment fails, the workflow is only partially complete.
 - Build generation, AppCenter upload, and release packaging are intentionally out of scope for this version.
 - Jira webhook automation uses one long-lived OpenCode session per Jira ticket and resumes that same session via the stored native OpenCode session id.
+- Built-in `build` and `plan` remain available for manual direct engineering or planning outside the Jira workflow.
+- Built-in `general` and `explore` remain available as reusable subagents. `fix` may use both; `triage` and `validation` may use `explore` for bounded read-only lookup.
 
 ## Layout
 
 - Project rules live in this root `AGENTS.md`.
-- OpenCode agents must live under `.opencode/agents/`.
-- OpenCode skills must live under `.opencode/skills/`.
+- Project-local custom OpenCode agents live under `.opencode/agent/`.
+- Project-local OpenCode skills live under `.opencode/skills/`.
 - Workspace mapping defaults:
   - React Native iOS app root: `/Users/vinaykumar/vymo/react-app`
   - React Native iOS native dir: `/Users/vinaykumar/vymo/react-app/iOS`
@@ -41,6 +44,12 @@ Every workflow stage must preserve these keys in its output and downstream hando
 - `Next handoff`
 
 When a stage adds more detail, keep the required keys and append stage-specific sections instead of replacing them.
+
+`fix` should also preserve these implementation-oriented fields whenever they are relevant:
+
+- `Discovery actions`
+- `Delegations`
+- `Implementation owner`
 
 ## OpenCode Session And Temp Artifacts
 
@@ -85,6 +94,7 @@ When a stage adds more detail, keep the required keys and append stage-specific 
 - Fix, validation, and delivery must run on the dedicated ticket branch, not the default branch.
 - If branch switching is blocked by local changes, prefer a descriptive stash over destructive cleanup.
 - Never use force checkout, hard reset, clean, or destructive removal to satisfy branch policy.
+- `fix` owns the main implementation path by default. If `general` is ever used, keep it limited to bounded side work that does not take over the critical code edit.
 
 ## Jira And Delivery Rules
 

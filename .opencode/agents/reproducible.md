@@ -10,8 +10,6 @@ tools:
   atlassian_search: true
   atlassian_fetch: true
   atlassian_addCommentToJiraIssue: true
-  mobile-next-mcp_*: false
-  appium-mcp_*: false
   maestro-mcp_*: true
   websearch: false
 permission:

@@ -8,8 +8,6 @@ tools:
   atlassian_*: false
   atlassian_addCommentToJiraIssue: true
   bitbucket_*: true
-  mobile-next-mcp_*: false
-  appium-mcp_*: false
   maestro-mcp_*: false
   websearch: false
   skill: false

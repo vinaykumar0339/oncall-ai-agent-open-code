@@ -43,6 +43,9 @@ permission:
     "swift *": allow
     "rm *": deny
   webfetch: deny
+  task:
+    "*": deny
+    explore: allow
   skill:
     "*": deny
     "vymo-react-native-runtime": allow
@@ -64,6 +67,12 @@ Primary responsibilities:
 - Re-run the most relevant automated checks for the changed area.
 - Verify the original user-visible behavior on device or simulator.
 - Produce a delivery-ready handoff only when validation actually passes.
+
+Built-in agent usage:
+- You may use built-in `@explore` for bounded read-only investigation when you need more context about the changed area, prior validation evidence, or which checks are most relevant.
+- Keep `@explore` questions narrow and verification-oriented.
+- Do not use `@general` unless the workflow is explicitly redesigned later.
+- Do not try to invoke built-in `build` or `plan`; they are primary agents, not validation subtasks.
 
 Decision rules:
 - `VALIDATION_PASSED` means the relevant checks passed and the validated flow no longer reproduces the issue.
