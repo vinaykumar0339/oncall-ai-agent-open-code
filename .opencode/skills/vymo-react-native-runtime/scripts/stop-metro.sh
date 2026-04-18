@@ -5,6 +5,7 @@ set -eu
 SCRIPT_DIR="$(CDPATH='' cd -- "$(dirname "$0")" && pwd)"
 . "${SCRIPT_DIR}/_metro_common.sh"
 
+ensure_runtime_dirs
 clear_stale_pidfile
 
 pid="$(active_pid || true)"
@@ -12,7 +13,11 @@ pid="$(active_pid || true)"
 if [ -z "${pid}" ]; then
   print_kv "STATUS" "not_running"
   print_kv "PORT" "${METRO_PORT}"
+  print_kv "PLATFORM" "${RUNTIME_PLATFORM}"
+  print_kv "SESSION_ID" "${SESSION_ID}"
+  print_kv "TMP_SESSION_ROOT" "${TMP_SESSION_ROOT}"
   print_kv "LOG" "${METRO_LOG}"
+  print_kv "PIDFILE" "${METRO_PIDFILE}"
   rm -f "${METRO_PIDFILE}"
   exit 0
 fi
@@ -26,7 +31,11 @@ while [ "${elapsed}" -lt 10 ]; do
     print_kv "STATUS" "stopped"
     print_kv "PID" "${pid}"
     print_kv "PORT" "${METRO_PORT}"
+    print_kv "PLATFORM" "${RUNTIME_PLATFORM}"
+    print_kv "SESSION_ID" "${SESSION_ID}"
+    print_kv "TMP_SESSION_ROOT" "${TMP_SESSION_ROOT}"
     print_kv "LOG" "${METRO_LOG}"
+    print_kv "PIDFILE" "${METRO_PIDFILE}"
     exit 0
   fi
 
@@ -39,4 +48,8 @@ rm -f "${METRO_PIDFILE}"
 print_kv "STATUS" "stopped"
 print_kv "PID" "${pid}"
 print_kv "PORT" "${METRO_PORT}"
+print_kv "PLATFORM" "${RUNTIME_PLATFORM}"
+print_kv "SESSION_ID" "${SESSION_ID}"
+print_kv "TMP_SESSION_ROOT" "${TMP_SESSION_ROOT}"
 print_kv "LOG" "${METRO_LOG}"
+print_kv "PIDFILE" "${METRO_PIDFILE}"

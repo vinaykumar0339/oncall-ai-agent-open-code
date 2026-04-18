@@ -2,12 +2,22 @@
 
 set -eu
 
+SCRIPT_DIR="$(CDPATH='' cd -- "$(dirname "$0")" && pwd)"
+REPO_ROOT="${REPO_ROOT:-$(CDPATH='' cd -- "${SCRIPT_DIR}/../../../.." && pwd)}"
 APP_ROOT="${APP_ROOT:-/Users/vinaykumar/vymo/react-app}"
+RUNTIME_PLATFORM="${RUNTIME_PLATFORM:-${PLATFORM:-ios}}"
+SESSION_ID="${SESSION_ID:-manual-session}"
+TMP_SESSION_ROOT="${TMP_SESSION_ROOT:-${REPO_ROOT}/tmp/${RUNTIME_PLATFORM}/${SESSION_ID}}"
+TMP_RUNTIME_DIR="${TMP_RUNTIME_DIR:-${TMP_SESSION_ROOT}/runtime}"
 METRO_PORT="${METRO_PORT:-8081}"
 METRO_HOST="${METRO_HOST:-127.0.0.1}"
-METRO_LOG="${METRO_LOG:-/tmp/opencode-vymo-metro.log}"
-METRO_PIDFILE="${METRO_PIDFILE:-/tmp/opencode-vymo-metro.pid}"
+METRO_LOG="${METRO_LOG:-${TMP_RUNTIME_DIR}/metro.log}"
+METRO_PIDFILE="${METRO_PIDFILE:-${TMP_RUNTIME_DIR}/metro.pid}"
 METRO_STATUS_URL="http://${METRO_HOST}:${METRO_PORT}/status"
+
+ensure_runtime_dirs() {
+  mkdir -p "${TMP_SESSION_ROOT}/logs" "${TMP_SESSION_ROOT}/evidence" "${TMP_RUNTIME_DIR}" "${TMP_SESSION_ROOT}/reports"
+}
 
 status_running() {
   if command -v curl >/dev/null 2>&1; then
