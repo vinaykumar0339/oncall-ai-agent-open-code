@@ -42,16 +42,18 @@ Available specialists:
 
 Workflow:
 1. Start with `triage` for every new issue unless the user explicitly asks to skip triage.
-2. Preserve the same `Session ID` across every stage.
-3. If triage returns `BLOCKED`, stop and report the blocker.
-4. If triage returns `READY_FOR_REPRODUCTION`, invoke `reproducible` with the reproduction handoff.
-5. If reproduction returns `REPRODUCED` and code workspace context exists, invoke `fix`.
-6. If `fix` returns `FIX_BLOCKED`, stop and report the blocker.
-7. If `fix` returns `FIX_APPLIED` or `FIX_PARTIAL`, invoke `validation`.
-8. If validation returns `VALIDATION_FAILED` and the feedback is actionable, invoke `fix` again with the validation failure handoff and rerun `validation`.
-9. Allow up to two validation-driven remediation loops after the first fix.
-10. If validation returns `VALIDATION_PASSED`, invoke `delivery`.
-11. Merge the specialist outputs into one concise user-facing summary.
+2. Preserve the same `OpenCode Session ID` across every stage when the caller provides it.
+3. Treat one Jira ticket as one long-lived OpenCode thread and resume that same thread on later webhook-driven updates.
+4. If new human public comments arrive while a run is already in progress, queue them and merge them into the same ticket thread after the current run finishes unless they are explicit control comments.
+5. If triage returns `BLOCKED`, stop and report the blocker.
+6. If triage returns `READY_FOR_REPRODUCTION`, invoke `reproducible` with the reproduction handoff.
+7. If reproduction returns `REPRODUCED` and code workspace context exists, invoke `fix`.
+8. If `fix` returns `FIX_BLOCKED`, stop and report the blocker.
+9. If `fix` returns `FIX_APPLIED` or `FIX_PARTIAL`, invoke `validation`.
+10. If validation returns `VALIDATION_FAILED` and the feedback is actionable, invoke `fix` again with the validation failure handoff and rerun `validation`.
+11. Allow up to two validation-driven remediation loops after the first fix.
+12. If validation returns `VALIDATION_PASSED`, invoke `delivery`.
+13. Merge the specialist outputs into one concise user-facing summary.
 
 Operating rules:
 - Preserve the required handoff keys between stages:
@@ -60,12 +62,15 @@ Operating rules:
   - `Issue summary`
   - `Branch context`
   - `Platform`
-  - `Session ID`
+  - `OpenCode Session ID`
   - `Runtime context`
   - `Evidence`
   - `Jira action`
   - `Next handoff`
-- Reproduction uses the ticket branch when one exists; otherwise it defaults to the repo default branch by preferring `main` and then `master`.
+- When an issue key is known, prefer an OpenCode session title that starts with that ticket id so resuming the same thread later is operationally obvious.
+- Branches must use `type/ticket-id-description`.
+- Default source branch is latest remote `master`.
+- If the ticket or actionable comment explicitly identifies a source branch, use that branch instead and preserve the reason in `Branch context`.
 - Fix, validation, and delivery must operate on the dedicated ticket branch, not the default branch.
 - If branch switching is blocked by local changes, prefer a descriptive stash over destructive cleanup.
 - Never rely on force checkout, hard reset, clean, or destructive removal to satisfy branch policy.
@@ -78,7 +83,7 @@ Final response format:
 - `Workflow status:` `BLOCKED`, `TRIAGED`, `REPRODUCED`, `NOT_REPRODUCIBLE`, `FIX_BLOCKED`, `VALIDATION_FAILED`, `VALIDATION_BLOCKED`, `VALIDATION_PASSED`, `DELIVERY_PARTIAL`, `DELIVERY_COMPLETE`, or `DELIVERY_BLOCKED`
 - `Issue key:` short value or `Unknown`
 - `Platform:` short value or `Unknown`
-- `Session ID:` session id carried through the workflow
+- `OpenCode Session ID:` native session id carried through the workflow, or `Unknown`
 - `Triage summary:` short summary
 - `Reproduction summary:` short summary or `Not run`
 - `Fix summary:` short summary or `Not run`

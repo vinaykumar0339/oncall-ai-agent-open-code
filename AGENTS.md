@@ -9,6 +9,7 @@ This repository defines an end-to-end OpenCode workflow for an on-call mobile en
 - Validation is a release gate. Do not treat a plausible fix as shippable until validation passes.
 - Delivery includes both the PR action and the Jira delivery comment. If the PR succeeds but the Jira delivery comment fails, the workflow is only partially complete.
 - Build generation, AppCenter upload, and release packaging are intentionally out of scope for this version.
+- Jira webhook automation uses one long-lived OpenCode session per Jira ticket and resumes that same session via the stored native OpenCode session id.
 
 ## Layout
 
@@ -33,7 +34,7 @@ Every workflow stage must preserve these keys in its output and downstream hando
 - `Issue summary`
 - `Branch context`
 - `Platform`
-- `Session ID`
+- `OpenCode Session ID`
 - `Runtime context`
 - `Evidence`
 - `Jira action`
@@ -41,21 +42,46 @@ Every workflow stage must preserve these keys in its output and downstream hando
 
 When a stage adds more detail, keep the required keys and append stage-specific sections instead of replacing them.
 
-## Session And Temp Artifacts
+## OpenCode Session And Temp Artifacts
 
-- Generate one `Session ID` per workflow run and carry it across all stages.
-- Store runtime and evidence artifacts only under `./tmp/{platform}/{sessionId}/`.
+- Use the native `OpenCode Session ID` for thread continuity across days and resumes. Do not invent a separate workflow id.
+- When starting a ticket thread, prefer an OpenCode session title that starts with the Jira key, for example `ABC-123 login crash`.
+- Resume the same OpenCode thread with the native session id instead of starting a new thread for the same ticket when possible.
+- Store runtime and evidence artifacts only under `./tmp/{platform}/{opencodeSessionId}/`.
 - Use this subfolder layout:
   - `logs/` for command and runner logs
   - `evidence/` for screenshots and captured artifacts
   - `runtime/` for pidfiles and service state
   - `reports/` for any optional local summaries
+- If the caller or webhook layer knows the current OpenCode session id, it should pass that exact value into the workflow handoff and runtime environment.
+- If the native session id is unavailable in a given entrypoint, preserve `OpenCode Session ID: Unknown` rather than generating a surrogate id in the agent prompts.
 - Do not write new workflow artifacts to `/tmp` when a repo-local temp path is possible.
 - When reporting evidence or runtime state, prefer repo-relative paths rooted at `./tmp/...`.
 
+## Webhook Runtime
+
+- Local webhook infrastructure uses Docker Compose for Redis and Postgres.
+- The webhook worker and `opencode serve` run on the host, not in Docker, so they can use local MCP/device/tooling access directly.
+- Redis is for per-ticket run locks, pending update queues, interrupt flags, and short-lived dedupe coordination.
+- Postgres is the durable source of truth for ticket-to-session mapping, processed webhook events, pending updates, run history, and branch metadata.
+- Actionable webhook events are:
+  - new ticket created
+  - new human public comment
+  - selected issue updates that materially change reproduction or fix context
+- Ignore workflow-generated delivery comments and other bot noise by default so the system does not recursively trigger itself.
+- If multiple comments arrive while a ticket run is already in progress, queue them and merge them into the same OpenCode ticket thread after the current run finishes unless the comment is a narrow control signal such as `stop`, `wrong ticket`, `use this branch`, `prod hotfix`, or `cannot reproduce anymore`.
+
 ## Branch And Safety Rules
 
-- Reproduction uses the ticket branch when specified, otherwise the repo default branch by preferring `main` and then `master`.
+- Branches must always use `type/ticket-id-description`.
+- Default source branch is the latest remote `master`, not stale local state.
+- If the ticket or an actionable comment explicitly identifies the source branch where the bug exists, use that branch and preserve the reason in `Branch context`.
+- Branch type mapping:
+  - defect or bug -> `bugfix`
+  - urgent production issue -> `hotfix`
+  - feature or enhancement -> `feature`
+  - fallback -> `other`
+- Reproduction uses the ticket branch when specified, otherwise the validated default branch source policy above.
 - Fix, validation, and delivery must run on the dedicated ticket branch, not the default branch.
 - If branch switching is blocked by local changes, prefer a descriptive stash over destructive cleanup.
 - Never use force checkout, hard reset, clean, or destructive removal to satisfy branch policy.
@@ -66,6 +92,14 @@ When a stage adds more detail, keep the required keys and append stage-specific 
 - Use `commentVisibility: { type: "group", value: "jira-vymo" }` unless the user explicitly supplies a different verified audience.
 - Do not include raw local filesystem paths, local usernames, or other internal-only machine identifiers in Jira comments unless the user explicitly asks.
 - Delivery should post a Jira update that links the PR and summarizes the validated change when an issue key is available.
+- When a Jira comment needs action or confirmation from a specific person, tag only a verified Jira user such as the reporter, assignee, or a recent relevant commenter.
+- Never guess a person to tag. Only tag when the Jira issue/comment data provides a verified identity that clearly maps to the person you need.
+- Prefer tagging:
+  - the reporter when asking for missing reproduction details or expected behavior
+  - the assignee when coordinating ownership or next action
+  - the most recent relevant commenter when their new information needs confirmation
+- Keep mentions minimal. Do not tag broad groups of people when one clearly relevant verified user is enough.
+- If the available Jira tool path cannot safely create a proper user mention, fall back to role-based wording such as `reporter` or `assignee` instead of guessing mention syntax.
 
 ## Secrets
 

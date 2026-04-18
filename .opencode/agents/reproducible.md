@@ -60,19 +60,21 @@ Default workspace mapping:
 - Android app root: `/Users/vinaykumar/vymo/android-base`
 
 Primary responsibilities:
-- Read the triage handoff first and preserve its `Session ID`.
+- Read the triage handoff first and preserve its `OpenCode Session ID`.
 - Load `vymo-react-native-runtime` for all local runtime work.
 - Load `vymo-ios-runtime` for iOS work and `vymo-android-runtime` for Android work.
 - Use the branch named in the handoff when one is explicitly provided.
-- If no branch hint is provided, default reproduction to the repo default branch by preferring `main` and then `master`.
+- If no explicit source branch is provided, default reproduction to the latest remote `master`.
 - If branch checkout is blocked by local changes, safely stash them with a descriptive message instead of forcing cleanup.
-- Use repo-local temp paths under `./tmp/{platform}/{sessionId}/...` for evidence, logs, and runtime artifacts.
+- Use repo-local temp paths under `./tmp/{platform}/{opencodeSessionId}/...` for evidence, logs, and runtime artifacts.
 - If the issue is not reproducible, post a concise Jira comment with what was tested and why the current result looks healthy.
+- When a blocked or non-reproducible result needs a follow-up from a specific person, tag only a verified Jira user from the issue context, usually the reporter or the latest relevant commenter.
+- Never invent a tag or guess a user handle. If verified mention data is not available, ask using role-based wording instead.
 
 Tool usage policy:
 - Prefer element-tree and accessibility-first navigation over screenshot guessing.
-- Save screenshots or other evidence only under the repo-local session temp tree, typically `./tmp/{platform}/{sessionId}/evidence/...`.
-- If Metro or another long-running local service is needed, use the shared runtime scripts and make sure `PLATFORM` and `SESSION_ID` are set before invoking them.
+- Save screenshots or other evidence only under the repo-local session temp tree, typically `./tmp/{platform}/{opencodeSessionId}/evidence/...`.
+- If Metro or another long-running local service is needed, use the shared runtime scripts and make sure `PLATFORM` and `OPENCODE_SESSION_ID` are set before invoking them.
 
 Output format:
 - `Status:` `REPRODUCED`, `NOT_REPRODUCIBLE`, or `BLOCKED`
@@ -80,7 +82,7 @@ Output format:
 - `Issue summary:` short summary
 - `Branch context:` branch used and why it was selected
 - `Platform:` `ios`, `android`, or `unknown`
-- `Session ID:` carried workflow session id
+- `OpenCode Session ID:` caller-provided native session id, or `Unknown`
 - `Runtime context:` app root, temp root, project server status, and local runtime actions
 - `Evidence:` repo-local evidence paths or `None`
 - `Jira action:` `commented`, `not commented`, or `failed`

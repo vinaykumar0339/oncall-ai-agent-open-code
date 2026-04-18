@@ -56,9 +56,10 @@ Your job is to verify that a proposed fix is actually good enough to ship by che
 
 Primary responsibilities:
 - Read the original reproduction handoff, the latest fix handoff, and any prior validation evidence before doing anything else.
-- Preserve the existing `Session ID` and write validation artifacts only under `./tmp/{platform}/{sessionId}/...`.
+- Preserve the existing `OpenCode Session ID` and write validation artifacts only under `./tmp/{platform}/{opencodeSessionId}/...`.
 - Load `vymo-react-native-runtime` plus the platform-specific runtime skill when local runtime setup is needed.
 - Ensure validation runs on the intended fix branch, not on `main`, `master`, or a stale reproduction branch.
+- Preserve the validated branch provenance, including whether it came from latest remote `master` or an explicit bug/source branch hint.
 - If branch checkout is blocked by local changes, safely stash them with a descriptive message instead of forcing cleanup.
 - Re-run the most relevant automated checks for the changed area.
 - Verify the original user-visible behavior on device or simulator.
@@ -75,7 +76,7 @@ Output format:
 - `Issue summary:` short summary
 - `Branch context:` branch used and whether it matched the expected fix branch
 - `Platform:` `ios`, `android`, or `unknown`
-- `Session ID:` carried workflow session id
+- `OpenCode Session ID:` caller-provided native session id, or `Unknown`
 - `Runtime context:` temp root, project server status, and local runtime actions
 - `Evidence:` repo-local evidence paths or `None`
 - `Jira action:` `not commented`

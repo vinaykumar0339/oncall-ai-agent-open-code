@@ -20,12 +20,12 @@ Relevant package scripts:
 
 - `yarn start` runs `react-native start --reset-cache --experimental-debugger`
 
-## Session Temp Layout
+## OpenCode Session Temp Layout
 
-Use one repo-local session root per workflow run:
+Use one repo-local session root per OpenCode thread:
 
-- `./tmp/ios/<session-id>/`
-- `./tmp/android/<session-id>/`
+- `./tmp/ios/<opencode-session-id>/`
+- `./tmp/android/<opencode-session-id>/`
 
 Use these subfolders:
 
@@ -38,7 +38,7 @@ Export these variables before running the Metro helper scripts when possible:
 
 ```sh
 export PLATFORM=ios
-export SESSION_ID=<session-id>
+export OPENCODE_SESSION_ID=<opencode-session-id>
 ```
 
 Optional overrides:
@@ -70,16 +70,16 @@ To stop it explicitly:
 
 The helper scripts manage:
 
-- session root: `./tmp/{platform}/{sessionId}/`
-- runtime pidfile: `./tmp/{platform}/{sessionId}/runtime/metro.pid`
-- runtime log: `./tmp/{platform}/{sessionId}/runtime/metro.log`
+- session root: `./tmp/{platform}/{opencodeSessionId}/`
+- runtime pidfile: `./tmp/{platform}/{opencodeSessionId}/runtime/metro.pid`
+- runtime log: `./tmp/{platform}/{opencodeSessionId}/runtime/metro.log`
 - health checks against port `8081`
 - reuse versus new start decision
 
 If needed, inspect readiness or errors with:
 
 ```sh
-tail -n 50 ./tmp/<platform>/<session-id>/runtime/metro.log
+tail -n 50 ./tmp/<platform>/<opencode-session-id>/runtime/metro.log
 ```
 
 ## Reporting Requirements
@@ -87,7 +87,7 @@ tail -n 50 ./tmp/<platform>/<session-id>/runtime/metro.log
 Whenever you started or reused runtime infrastructure, report:
 
 - platform
-- session id
+- OpenCode session id
 - temp session root
 - Metro status: reused or started
 - background command used
