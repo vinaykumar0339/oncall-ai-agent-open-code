@@ -69,6 +69,7 @@ Default workspace mapping:
 
 Primary responsibilities:
 - Read the triage handoff first and preserve its `OpenCode Session ID`.
+- Read and preserve the latest `Jira Context Snapshot`.
 - Load runtime skills by platform:
   - `ios` -> `vymo-react-native-runtime` plus `vymo-ios-runtime`
   - `android` -> `vymo-android-runtime`
@@ -78,19 +79,20 @@ Primary responsibilities:
 - Use the branch named in the handoff when one is explicitly provided.
 - If no explicit source branch is provided, default reproduction to the latest remote `master`.
 - If branch checkout is blocked by local changes, safely stash them with a descriptive message instead of forcing cleanup.
-- Use repo-local temp paths under `./tmp/{platform}/{opencodeSessionId}/...` for evidence, logs, and runtime artifacts.
-- Before writing any evidence, logs, or runtime files, create the session temp tree with `.opencode/skills/vymo-react-native-runtime/scripts/create-session-dirs.sh`.
+- Use repo-local temp paths under `./tmp/{ticketKey}/{platform}/...` for evidence, logs, and runtime artifacts.
+- Before writing any evidence, logs, or runtime files, create the ticket temp tree with `.opencode/skills/vymo-react-native-runtime/scripts/create-session-dirs.sh`.
 - If the issue is not reproducible, post a concise Jira comment with what was tested and why the current result looks healthy.
+- Propose Jira workflow state changes when the ticket should reflect a real workflow change such as blocked, needs-info, invalid, or actively in progress, but do not mutate Jira workflow fields directly yourself.
 - When a blocked or non-reproducible result needs a follow-up from a specific person, tag only a verified Jira user from the issue context, usually the reporter or the latest relevant commenter.
 - Never invent a tag or guess a user handle. If verified mention data is not available, ask using role-based wording instead.
 
 Tool usage policy:
 - Prefer element-tree and accessibility-first navigation over screenshot guessing.
-- Save screenshots or other evidence only under the repo-local session temp tree, typically `./tmp/{platform}/{opencodeSessionId}/evidence/...`.
+- Save screenshots or other evidence only under the repo-local ticket temp tree, typically `./tmp/{ticketKey}/{platform}/evidence/...`.
 - Use the shared temp-dir helper so `logs/`, `evidence/`, `runtime/`, and `reports/` exist before writing artifacts.
 - Only use the shared Metro/runtime scripts for the React Native iOS workspace.
 - Do not assume Metro is required for the native Android repo.
-- When invoking shared runtime scripts for iOS work, set `PLATFORM=ios`, `OPENCODE_SESSION_ID`, and `APP_ROOT=/Users/vinaykumar/vymo/react-app`.
+- When invoking shared runtime scripts for iOS work, set `PLATFORM=ios`, `TICKET_KEY`, and `APP_ROOT=/Users/vinaykumar/vymo/react-app`.
 
 Output format:
 - `Status:` `REPRODUCED`, `NOT_REPRODUCIBLE`, or `BLOCKED`
@@ -99,9 +101,12 @@ Output format:
 - `Branch context:` branch used and why it was selected
 - `Platform:` `ios`, `android`, or `unknown`
 - `OpenCode Session ID:` caller-provided native session id, or `Unknown`
+- `Jira Context Snapshot:` preserve the latest canonical Jira context and append newly verified reproduction findings
 - `Runtime context:` app root, temp root, project server status, and local runtime actions
 - `Evidence:` repo-local evidence paths or `None`
 - `Jira action:` `commented`, `not commented`, or `failed`
+- `Suggested Jira workflow action:` `none`, `start_progress`, `blocked`, `invalid`, `needs_info`, or another short semantic intent with a one-line reason
+- `Human handoff recommendation:` `none` or a short recommendation if reproduction is blocked for reasons a human owner should take over
 - `Next handoff:` reproduction brief, missing prerequisites, or non-repro justification
 - `Stash action:` `not needed`, `created`, or `failed`
 - `Device used:` model or identifier

@@ -16,7 +16,7 @@ Load [references/commands.md](references/commands.md) before running Android wor
 3. Prefer the Gradle wrapper and repo-documented tasks over JavaScript package scripts.
 4. Use root-level Gradle tasks, module-specific Gradle tasks, and emulator/device flows that match this native Android repo.
 5. Report Android-specific blockers separately from React Native / Metro blockers in the iOS workspace.
-6. Before writing any local logs, screenshots, or reports, create the repo-local temp session tree with `../vymo-react-native-runtime/scripts/create-session-dirs.sh`.
+6. Before writing any local logs, screenshots, or reports, create the repo-local temp ticket tree with `../vymo-react-native-runtime/scripts/create-session-dirs.sh`.
 
 ## Android Rules
 

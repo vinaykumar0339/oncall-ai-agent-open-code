@@ -21,12 +21,12 @@ Relevant package scripts:
 
 - `yarn start` runs `react-native start --reset-cache --experimental-debugger`
 
-## OpenCode Session Temp Layout
+## Ticket Temp Layout
 
-Use one repo-local session root per OpenCode thread:
+Use one repo-local ticket root per Jira issue:
 
-- `./tmp/ios/<opencode-session-id>/`
-- `./tmp/android/<opencode-session-id>/`
+- `./tmp/<ticket-key>/ios/`
+- `./tmp/<ticket-key>/android/`
 
 Use these subfolders:
 
@@ -39,7 +39,7 @@ Create them with the helper before writing artifacts:
 
 ```sh
 export PLATFORM=ios
-export OPENCODE_SESSION_ID=<opencode-session-id>
+export TICKET_KEY=<jira-ticket-key>
 /Users/vinaykumar/vymo/workiq/oncall-ai-agent-open-code/.opencode/skills/vymo-react-native-runtime/scripts/create-session-dirs.sh
 ```
 
@@ -47,7 +47,7 @@ Export these variables before running the Metro helper scripts when possible:
 
 ```sh
 export PLATFORM=ios
-export OPENCODE_SESSION_ID=<opencode-session-id>
+export TICKET_KEY=<jira-ticket-key>
 ```
 
 React Native workspace root:
@@ -90,18 +90,18 @@ To stop it explicitly:
 
 The helper scripts manage:
 
-- session root: `./tmp/{platform}/{opencodeSessionId}/`
+- ticket root: `./tmp/{ticketKey}/{platform}/`
 - subdirectory creation for `logs/`, `evidence/`, `runtime/`, and `reports/`
 - React Native app root selection when `APP_ROOT` is unset
-- runtime pidfile: `./tmp/{platform}/{opencodeSessionId}/runtime/metro.pid`
-- runtime log: `./tmp/{platform}/{opencodeSessionId}/runtime/metro.log`
+- runtime pidfile: `./tmp/{ticketKey}/{platform}/runtime/metro.pid`
+- runtime log: `./tmp/{ticketKey}/{platform}/runtime/metro.log`
 - health checks against port `8081`
 - reuse versus new start decision
 
 If needed, inspect readiness or errors with:
 
 ```sh
-tail -n 50 ./tmp/<platform>/<opencode-session-id>/runtime/metro.log
+tail -n 50 ./tmp/<ticket-key>/<platform>/runtime/metro.log
 ```
 
 ## Reporting Requirements
@@ -110,8 +110,8 @@ Whenever you started or reused runtime infrastructure, report:
 
 - platform
 - app root
-- OpenCode session id
-- temp session root
+- ticket key
+- temp ticket root
 - Metro status: reused or started
 - background command used
 - log path

@@ -10,11 +10,11 @@
 
 Run these from `/Users/vinaykumar/vymo/android-base`.
 
-Create the repo-local temp session tree before writing artifacts:
+Create the repo-local temp ticket tree before writing artifacts:
 
 ```sh
 export PLATFORM=android
-export OPENCODE_SESSION_ID=<opencode-session-id>
+export TICKET_KEY=<jira-ticket-key>
 /Users/vinaykumar/vymo/workiq/oncall-ai-agent-open-code/.opencode/skills/vymo-react-native-runtime/scripts/create-session-dirs.sh
 ```
 

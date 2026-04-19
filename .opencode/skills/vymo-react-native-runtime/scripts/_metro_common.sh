@@ -7,9 +7,9 @@ REPO_ROOT="${REPO_ROOT:-$(CDPATH='' cd -- "${SCRIPT_DIR}/../../../.." && pwd)}"
 RUNTIME_PLATFORM="${RUNTIME_PLATFORM:-${PLATFORM:-ios}}"
 DEFAULT_IOS_APP_ROOT="/Users/vinaykumar/vymo/react-app"
 APP_ROOT="${APP_ROOT:-}"
-OPENCODE_SESSION_ID="${OPENCODE_SESSION_ID:-${SESSION_ID:-no-opencode-session}}"
-TMP_SESSION_ROOT="${TMP_SESSION_ROOT:-${REPO_ROOT}/tmp/${RUNTIME_PLATFORM}/${OPENCODE_SESSION_ID}}"
-TMP_RUNTIME_DIR="${TMP_RUNTIME_DIR:-${TMP_SESSION_ROOT}/runtime}"
+TICKET_KEY="${TICKET_KEY:-${ISSUE_KEY:-unknown-ticket}}"
+TMP_TICKET_ROOT="${TMP_TICKET_ROOT:-${REPO_ROOT}/tmp/${TICKET_KEY}/${RUNTIME_PLATFORM}}"
+TMP_RUNTIME_DIR="${TMP_RUNTIME_DIR:-${TMP_TICKET_ROOT}/runtime}"
 METRO_PORT="${METRO_PORT:-8081}"
 METRO_HOST="${METRO_HOST:-127.0.0.1}"
 METRO_LOG="${METRO_LOG:-${TMP_RUNTIME_DIR}/metro.log}"
@@ -21,7 +21,7 @@ if [ -z "${APP_ROOT}" ]; then
 fi
 
 ensure_runtime_dirs() {
-  mkdir -p "${TMP_SESSION_ROOT}/logs" "${TMP_SESSION_ROOT}/evidence" "${TMP_RUNTIME_DIR}" "${TMP_SESSION_ROOT}/reports"
+  mkdir -p "${TMP_TICKET_ROOT}/logs" "${TMP_TICKET_ROOT}/evidence" "${TMP_RUNTIME_DIR}" "${TMP_TICKET_ROOT}/reports"
 }
 
 status_running() {

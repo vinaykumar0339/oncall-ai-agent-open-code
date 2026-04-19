@@ -12,22 +12,22 @@ if status_running; then
   pid="$(active_pid || true)"
   print_kv "STATUS" "running"
   print_kv "PID" "${pid:-unknown}"
+  print_kv "TICKET_KEY" "${TICKET_KEY}"
   print_kv "PORT" "${METRO_PORT}"
   print_kv "APP_ROOT" "${APP_ROOT}"
   print_kv "PLATFORM" "${RUNTIME_PLATFORM}"
-  print_kv "OPENCODE_SESSION_ID" "${OPENCODE_SESSION_ID}"
-  print_kv "TMP_SESSION_ROOT" "${TMP_SESSION_ROOT}"
+  print_kv "TMP_TICKET_ROOT" "${TMP_TICKET_ROOT}"
   print_kv "LOG" "${METRO_LOG}"
   print_kv "PIDFILE" "${METRO_PIDFILE}"
   exit 0
 fi
 
 print_kv "STATUS" "not_running"
+print_kv "TICKET_KEY" "${TICKET_KEY}"
 print_kv "PORT" "${METRO_PORT}"
 print_kv "APP_ROOT" "${APP_ROOT}"
 print_kv "PLATFORM" "${RUNTIME_PLATFORM}"
-print_kv "OPENCODE_SESSION_ID" "${OPENCODE_SESSION_ID}"
-print_kv "TMP_SESSION_ROOT" "${TMP_SESSION_ROOT}"
+print_kv "TMP_TICKET_ROOT" "${TMP_TICKET_ROOT}"
 print_kv "LOG" "${METRO_LOG}"
 print_kv "PIDFILE" "${METRO_PIDFILE}"
 exit 1
