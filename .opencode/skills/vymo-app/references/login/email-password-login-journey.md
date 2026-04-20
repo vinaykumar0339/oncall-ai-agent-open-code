@@ -8,12 +8,9 @@ It is intended for device-control flows, especially Maestro-based automation, th
 
 - Protocol in focus: `VYMO_LOGIN`
 - Journey in focus: classic email-first sign-in
-- Platform scope:
-  - iOS
-  - Android
-- Apps in scope:
-  - `Vymo`
-  - `ABC` (Aditya Birla Capital white-label app)
+- Use this after the top-level app skill has already identified:
+  - app variant: `Vymo` or `ABC`
+  - platform: `iOS` or `Android`
 
 ## Product Truth
 
@@ -48,28 +45,6 @@ The full journey includes:
    - account restart
 6. Login is only truly complete after session initialization succeeds
 7. After login, logout can appear from user-visible menus or happen automatically from auth or security failures
-
-## App Variant Awareness
-
-The same product model supports two white-label apps:
-
-### Vymo
-
-- Default branded app
-- Standard Vymo app journey expectations
-
-### ABC
-
-- Aditya Birla Capital white-label app
-- Same overall journey model can apply, but device-control should always record that the visible app is ABC, not Vymo
-
-For Maestro or device-control automation:
-- always identify whether the device is currently driving `Vymo` or `ABC`
-- do not collapse both into one unnamed app journey
-
-Platform note:
-- this reference is for the app journey on both iOS and Android
-- implementation details can vary by platform, but the login, reset, recovery, and logout model should be treated as an app-level lifecycle
 
 ## How The Classic Journey Starts
 
@@ -410,17 +385,3 @@ The shared product model is:
 - allow user-triggered or forced logout later
 
 Use platform-specific code only to verify details when needed. The primary truth this skill should describe is the app journey seen by the user on iOS and Android.
-
-## Practical Summary
-
-If you need to explain the classic journey briefly:
-
-1. User starts in the classic sign-in flow, either directly or after stepper hands off.
-2. User enters email or login id first.
-3. App identifies the login protocol.
-4. If the login type is `VYMO_LOGIN`, the user moves into the password journey.
-5. The user may still need OTP, password setup, 2FA, device verification, or an account restart before finishing.
-6. Login completes only after session initialization succeeds.
-7. Logout can appear in hamburger or settings depending on configuration, and either surface may require scrolling.
-8. Biometric can appear during sign-in, as a post-login setup prompt, or as a post-login re-authentication gate.
-9. Logout can also happen from account-switching flows, in-session reset-password, biometric setup flows, or forced auth or security failures.

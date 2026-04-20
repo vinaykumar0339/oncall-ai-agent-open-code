@@ -7,12 +7,9 @@ It is written for device-control flows, especially Maestro-based navigation, whe
 ## Scope
 
 - Entry experience in focus: stepper login
-- Platform scope:
-  - iOS
-  - Android
-- Apps in scope:
-  - `Vymo`
-  - `ABC` (Aditya Birla Capital white-label app)
+- Use this after the top-level app skill has already identified:
+  - app variant: `Vymo` or `ABC`
+  - platform: `iOS` or `Android`
 
 ## Product Truth
 
@@ -52,26 +49,6 @@ For Maestro or similar device-control agents:
   - the signed-in app after session initialization
 
 This is the main reason stepper needs its own reference.
-
-## App Variant Awareness
-
-The same login model supports two white-label apps:
-
-### Vymo
-
-- Default branded app
-- Standard Vymo app journey expectations
-
-### ABC
-
-- Aditya Birla Capital white-label app
-- Same overall product logic can apply, but device-control should still be aware that the visible app identity is different
-
-For device-control flows, always confirm which app is being driven before interpreting screens or recording evidence.
-
-Platform note:
-- this reference describes the visible app journey on both iOS and Android
-- screen structure or native wrappers may differ slightly by platform, but the stepper journey should be understood as an app-level flow
 
 ## Stepper Journey In Plain Language
 
