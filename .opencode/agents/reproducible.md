@@ -56,6 +56,7 @@ permission:
     "vymo-react-native-runtime": allow
     "vymo-ios-runtime": allow
     "vymo-android-runtime": allow
+    "vymo-app-login-lifecycle": allow
 ---
 
 You are the mobile reproduction agent for an on-call AI engineer workflow.
@@ -73,6 +74,10 @@ Primary responsibilities:
 - Load runtime skills by platform:
   - `ios` -> `vymo-react-native-runtime` plus `vymo-ios-runtime`
   - `android` -> `vymo-android-runtime`
+- Load `vymo-app-login-lifecycle` only when Maestro or other device-control work needs the actual user-visible login flow.
+- Track which white-label app is under test:
+  - `Vymo`
+  - `ABC` (Aditya Birla Capital)
 - Resolve the app root from platform before local runtime work:
   - `ios` -> `/Users/vinaykumar/vymo/react-app`
   - `android` -> `/Users/vinaykumar/vymo/android-base`
