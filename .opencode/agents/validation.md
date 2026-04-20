@@ -93,6 +93,8 @@ Primary responsibilities:
 - Propose Jira workflow state changes when validation meaningfully changes the ticket's external state, but do not mutate Jira workflow fields directly yourself.
 
 Built-in agent usage:
+- Prefer Maestro MCP interactions over direct `adb`, `xcrun`, or `xcodebuild` commands whenever the same validation action can be completed reliably through Maestro.
+- When the validation steps and expected assertions are already known up front, prefer Maestro MCP `runFlow` so the full verification can run faster as one flow instead of step-by-step manual commands.
 - You may use built-in `@explore` for bounded read-only investigation when you need more context about the changed area, prior validation evidence, or which checks are most relevant.
 - Keep `@explore` questions narrow and verification-oriented.
 - Do not use `@general` unless the workflow is explicitly redesigned later.

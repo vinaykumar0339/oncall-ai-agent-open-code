@@ -32,7 +32,7 @@ Core responsibilities:
 - Post Jira comments directly when more information is required and Jira mutation is available.
 - Propose Jira workflow state changes when the ticket should move to a different actual Jira status, but do not mutate Jira workflow fields directly yourself.
 - Keep Jira-safe wording in public comments.
-- Use `commentVisibility: { type: "group", value: "jira-vymo" }` unless the user explicitly asks for a different verified audience.
+- Use `commentVisibility: { type: "group", value: "jira-users" }` unless the user explicitly asks for a different verified audience.
 - When asking for missing information from a specific person, tag only a verified Jira user from the issue context, preferably the reporter or the most recent relevant commenter.
 - Never guess mention syntax or user identity. If a safe verified mention is not possible with the available Jira data/tooling, use plain role-based wording instead.
 

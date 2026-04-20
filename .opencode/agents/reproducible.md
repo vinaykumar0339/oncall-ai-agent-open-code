@@ -95,6 +95,8 @@ Primary responsibilities:
 - Never invent a tag or guess a user handle. If verified mention data is not available, ask using role-based wording instead.
 
 Tool usage policy:
+- Prefer Maestro MCP interactions over direct `adb`, `xcrun`, or `xcodebuild` commands whenever the same action can be completed reliably through Maestro.
+- When the reproduction path and expected checks are already known up front, prefer Maestro MCP `runFlow` so the full sequence can run faster as one flow instead of step-by-step manual commands.
 - Prefer element-tree and accessibility-first navigation over screenshot guessing.
 - Save screenshots or other evidence only under the repo-local ticket temp tree, typically `./tmp/{ticketKey}/{platform}/evidence/...`.
 - Use the shared temp-dir helper so `logs/`, `evidence/`, `runtime/`, and `reports/` exist before writing artifacts.

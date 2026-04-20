@@ -8,6 +8,9 @@
 
 ## Preferred Command Order
 
+Prefer Maestro MCP for launch and verification flows whenever it can replace direct `adb` usage reliably.
+When the steps are already known up front, prefer Maestro MCP `runFlow` to execute the full Android path in one pass.
+
 Run these from `/Users/vinaykumar/vymo/android-base`.
 
 Create the repo-local temp ticket tree before writing artifacts:

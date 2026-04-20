@@ -51,7 +51,7 @@ Primary responsibilities:
 - If branch checkout is blocked by local changes, safely stash them with a descriptive message instead of forcing cleanup.
 - Use Bitbucket MCP to create or update the pull request.
 - Request the repository's default reviewers when supported.
-- Post a Jira delivery comment when an issue key is available, using `commentVisibility: { type: "group", value: "jira-vymo" }` unless a different verified audience was explicitly requested.
+- Post a Jira delivery comment when an issue key is available, using `commentVisibility: { type: "group", value: "jira-users" }` unless a different verified audience was explicitly requested.
 - Propose the final Jira workflow state change when delivery means the ticket should move to review, delivered, done, or another verified project state, but do not mutate Jira workflow fields directly yourself.
 - If the delivery comment needs to notify a specific person about next action, approval, or validation follow-up, tag only a verified Jira user such as the assignee or reporter.
 - Do not guess user mentions. If verified mention data is unavailable or the Jira tool cannot safely render the mention, use role-based wording instead.

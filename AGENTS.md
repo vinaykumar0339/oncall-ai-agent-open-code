@@ -131,7 +131,7 @@ Do not rely on long conversational memory when these facts can be preserved expl
 - Only `jira-workflow` should inspect actual available Jira transitions and apply real workflow mutations.
 - Never guess a Jira transition name or workflow field value. Prefer no mutation over an incorrect mutation.
 - Treat priority changes as high-impact. Raise or lower priority only when the evidence clearly justifies it.
-- Use `commentVisibility: { type: "group", value: "jira-vymo" }` unless the user explicitly supplies a different verified audience.
+- Use `commentVisibility: { type: "group", value: "jira-users" }` unless the user explicitly supplies a different verified audience.
 - Do not include raw local filesystem paths, local usernames, or other internal-only machine identifiers in Jira comments unless the user explicitly asks.
 - Delivery should post a Jira update that links the PR and summarizes the validated change when an issue key is available.
 - When a Jira comment needs action or confirmation from a specific person, tag only a verified Jira user such as the reporter, assignee, or a recent relevant commenter.

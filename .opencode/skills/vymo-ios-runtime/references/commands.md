@@ -20,6 +20,9 @@ Relevant package scripts:
 
 ## Launch Pattern
 
+Prefer Maestro MCP for launch and verification flows whenever it can replace direct `xcrun` or `xcodebuild` usage reliably.
+When the steps are already known up front, prefer Maestro MCP `runFlow` to execute the full iOS path in one pass.
+
 From the app root:
 
 ```sh

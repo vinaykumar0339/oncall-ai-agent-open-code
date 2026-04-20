@@ -21,6 +21,8 @@ Load [references/commands.md](references/commands.md) before running Android wor
 ## Android Rules
 
 - Prefer a healthy emulator or attached device before declaring the issue blocked.
+- Prefer Maestro MCP for launch, navigation, and verification flows whenever it can replace direct `adb` usage reliably.
+- When the Android steps are already known up front, prefer Maestro MCP `runFlow` to execute the full path in one pass.
 - If Gradle, emulator, or Android SDK state is broken locally, report that as an environment blocker instead of a product conclusion.
 - Do not assume Metro or `yarn start` is part of this Android repo.
 - Determine the Android app kind from verified flavor, client, or application id context before choosing a debug variant.

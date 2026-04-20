@@ -20,6 +20,8 @@ Load [references/commands.md](references/commands.md) before running iOS workspa
 ## iOS Rules
 
 - Native folder name is `iOS`, not `ios`.
+- Prefer Maestro MCP for launch, navigation, and verification flows whenever it can replace direct `xcrun` or `xcodebuild` usage reliably.
+- When the iOS steps are already known up front, prefer Maestro MCP `runFlow` to execute the full path in one pass.
 - When invoking shared Metro helper scripts during iOS work, set `PLATFORM=ios` so the shared runtime resolves the correct app root and temp paths.
 - Determine the iOS app kind from verified `react-app/iOS` scheme, ticket, or bundle id context before choosing a launch target.
 - Default Vymo reproduction and validation to the `Vymo` scheme.
