@@ -23,5 +23,9 @@ Load [references/commands.md](references/commands.md) before running Android wor
 - Prefer a healthy emulator or attached device before declaring the issue blocked.
 - If Gradle, emulator, or Android SDK state is broken locally, report that as an environment blocker instead of a product conclusion.
 - Do not assume Metro or `yarn start` is part of this Android repo.
+- Determine the Android app kind from verified flavor, client, or application id context before choosing a debug variant.
+- Default Vymo app reproduction and validation to the `betaMasterDebug` variant.
+- Use the `abcMasterDebug` variant for the ABC white-label app flow.
+- Only override those defaults when a ticket-specific verified requirement requires a different variant.
 - Prefer native Gradle verification such as `./gradlew tasks`, targeted assemble tasks, or module-specific checks before concluding the issue is blocked.
 - Key modules live under `library`, `core`, `features`, `shared`, and `mediator`.

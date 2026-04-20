@@ -21,6 +21,10 @@ Load [references/commands.md](references/commands.md) before running iOS workspa
 
 - Native folder name is `iOS`, not `ios`.
 - When invoking shared Metro helper scripts during iOS work, set `PLATFORM=ios` so the shared runtime resolves the correct app root and temp paths.
+- Determine the iOS app kind from verified `react-app/iOS` scheme, ticket, or bundle id context before choosing a launch target.
+- Default Vymo reproduction and validation to the `Vymo` scheme.
+- Use the `ABC Stellar` scheme for the ABC white-label app flow.
+- Use the staging schemes `Vymo-Staging` and `ABC Stellar - Staging` only when the ticket explicitly requires the staging or enterprise-style iOS app.
 - Use `yarn pod-install` before retrying if native dependency state looks broken.
 - If direct native inspection is required, prefer the checked-in workspace and project clues from the command reference.
 - Stop and report a blocker if pods fail or if simulator launch fails for local environment reasons.

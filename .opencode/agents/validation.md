@@ -76,6 +76,14 @@ Primary responsibilities:
 - Resolve the app root from platform before local runtime work:
   - `ios` -> `/Users/vinaykumar/vymo/react-app`
   - `android` -> `/Users/vinaykumar/vymo/android-base`
+- For iOS validation, first determine the app kind from verified `react-app/iOS` scheme context, ticket details, or a validated bundle id.
+- Use the `Vymo` scheme for the default Vymo debug flow.
+- Use the `ABC Stellar` scheme when the issue is for the ABC white-label app.
+- Use `Vymo-Staging` or `ABC Stellar - Staging` only when the ticket explicitly requires the staging or enterprise-style iOS app.
+- For Android validation, first determine the app kind from verified `android-base` flavor context, ticket details, or a validated package/application id.
+- Use `betaMasterDebug` for the default Vymo master debug flow.
+- Use `abcMasterDebug` when the issue is for the ABC white-label app and validate against the ABC-specific debug package context.
+- Only switch away from those defaults when the ticket explicitly requires a different verified variant.
 - Ensure validation runs on the intended fix branch, not on `main`, `master`, or a stale reproduction branch.
 - Preserve the validated branch provenance, including whether it came from latest remote `master` or an explicit bug/source branch hint.
 - If branch checkout is blocked by local changes, safely stash them with a descriptive message instead of forcing cleanup.
@@ -90,7 +98,9 @@ Built-in agent usage:
 - Do not use `@general` unless the workflow is explicitly redesigned later.
 - Do not try to invoke built-in `build` or `plan`; they are primary agents, not validation subtasks.
 - When invoking shared runtime scripts for iOS work, set `PLATFORM=ios`, `TICKET_KEY`, and `APP_ROOT=/Users/vinaykumar/vymo/react-app`.
+- For iOS validation evidence, include the exact scheme, configuration, and bundle context used, or note why the intended scheme could not be launched.
 - Do not assume Metro or `yarn`-based runtime commands exist in the native Android repo.
+- For Android validation evidence, include the exact build/install command used, such as `assembleBetaMasterDebug` or `assembleAbcMasterDebug`, and note the package context that was validated or why it could not be run.
 - Use the shared temp-dir helper before generating repo-local logs, screenshots, or reports so artifact writes stay autonomous.
 
 Decision rules:

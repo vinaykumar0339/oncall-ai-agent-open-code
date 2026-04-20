@@ -109,6 +109,14 @@ Do not rely on long conversational memory when these facts can be preserved expl
   - fallback -> `other`
 - Reproduction uses the ticket branch when specified, otherwise the validated default branch source policy above.
 - Fix, validation, and delivery must run on the dedicated ticket branch, not the default branch.
+- For Android `reproducible` and `validation`, determine the app kind from verified `android-base` flavor context before building or launching.
+- Use `betaMasterDebug` for the default Vymo master debug flow.
+- Use `abcMasterDebug` for the ABC white-label app flow and launch the ABC debug package context rather than the default Vymo package context.
+- Only use a different Android variant when the ticket or verified runtime context explicitly requires it.
+- For iOS `reproducible` and `validation`, determine the app kind from verified `react-app/iOS` scheme, bundle id, or ticket context before launching.
+- Use the `Vymo` scheme for the default Vymo debug flow and `Vymo-Staging` when the ticket explicitly requires the staging or enterprise-style iOS app.
+- Use the `ABC Stellar` scheme for the ABC debug flow and `ABC Stellar - Staging` when the ticket explicitly requires the ABC staging or enterprise-style iOS app.
+- Only use a different iOS scheme or configuration when the ticket or verified runtime context explicitly requires it.
 - If branch switching is blocked by local changes, prefer a descriptive stash over destructive cleanup.
 - Never use force checkout, hard reset, clean, or destructive removal to satisfy branch policy.
 - `fix` owns the main implementation path by default. If `general` is ever used, keep it limited to bounded side work that does not take over the critical code edit.

@@ -76,6 +76,14 @@ Primary responsibilities:
 - Resolve the app root from platform before local runtime work:
   - `ios` -> `/Users/vinaykumar/vymo/react-app`
   - `android` -> `/Users/vinaykumar/vymo/android-base`
+- For iOS reproduction, first determine the app kind from verified `react-app/iOS` scheme context, ticket details, or a validated bundle id.
+- Use the `Vymo` scheme for the default Vymo debug flow.
+- Use the `ABC Stellar` scheme when the issue is for the ABC white-label app.
+- Use `Vymo-Staging` or `ABC Stellar - Staging` only when the ticket explicitly requires the staging or enterprise-style iOS app.
+- For Android reproduction, first determine the app kind from verified `android-base` flavor context, ticket details, or a validated package/application id.
+- Use `betaMasterDebug` for the default Vymo master debug flow.
+- Use `abcMasterDebug` when the issue is for the ABC white-label app and launch the ABC-specific debug package context.
+- Only switch away from those defaults when the Jira context or a verified runtime note explicitly requires a different variant.
 - Use the branch named in the handoff when one is explicitly provided.
 - If no explicit source branch is provided, default reproduction to the latest remote `master`.
 - If branch checkout is blocked by local changes, safely stash them with a descriptive message instead of forcing cleanup.
@@ -91,7 +99,9 @@ Tool usage policy:
 - Save screenshots or other evidence only under the repo-local ticket temp tree, typically `./tmp/{ticketKey}/{platform}/evidence/...`.
 - Use the shared temp-dir helper so `logs/`, `evidence/`, `runtime/`, and `reports/` exist before writing artifacts.
 - Only use the shared Metro/runtime scripts for the React Native iOS workspace.
+- For iOS logs and evidence, record the exact scheme and bundle context used, such as `Vymo`, `Vymo-Staging`, `ABC Stellar`, or `ABC Stellar - Staging`.
 - Do not assume Metro is required for the native Android repo.
+- For Android logs and evidence, record the exact build/install target used, such as `betaMasterDebug` or `abcMasterDebug`, plus the package context that was launched.
 - When invoking shared runtime scripts for iOS work, set `PLATFORM=ios`, `TICKET_KEY`, and `APP_ROOT=/Users/vinaykumar/vymo/react-app`.
 
 Output format:
