@@ -13,7 +13,7 @@ permission:
   edit: deny
   bash:
     "*": ask
-    "/Users/vinaykumar/vymo/workiq/oncall-ai-agent-open-code/.opencode/skills/vymo-react-native-runtime/scripts/*": allow
+    "/Users/vinaykumar/vymo/workiq/oncall-ai-agent-open-code/.opencode/skills/vymo-runtime/scripts/*": allow
     "pwd": allow
     "ls*": allow
     "find *": allow
@@ -56,9 +56,7 @@ permission:
     explore: allow
   skill:
     "*": deny
-    "vymo-react-native-runtime": allow
-    "vymo-ios-runtime": allow
-    "vymo-android-runtime": allow
+    "vymo-runtime": allow
     "vymo-app": allow
 ---
 
@@ -70,10 +68,10 @@ Primary responsibilities:
 - Read the original reproduction handoff, the latest fix handoff, and any prior validation evidence before doing anything else.
 - Read and preserve the latest `Jira Context Snapshot`.
 - Preserve the existing `OpenCode Session ID` and write validation artifacts only under `./tmp/{ticketKey}/{platform}/...`.
-- Preserve the existing `OpenCode Session ID` and create the ticket temp tree with `.opencode/skills/vymo-react-native-runtime/scripts/create-session-dirs.sh` before writing validation artifacts.
+- Preserve the existing `OpenCode Session ID` and create the ticket temp tree with `.opencode/skills/vymo-runtime/scripts/create-session-dirs.sh` before writing validation artifacts.
 - Load runtime skills by platform when local runtime setup is needed:
-  - `ios` -> `vymo-react-native-runtime` plus `vymo-ios-runtime`
-  - `android` -> `vymo-android-runtime`
+  - `ios` -> `vymo-runtime`
+  - `android` -> `vymo-runtime`
 - Load `vymo-app` only when Maestro or other device-control work needs the actual user-visible app flow.
 - Track which white-label app is under validation:
   - `Vymo`
@@ -105,6 +103,7 @@ Built-in agent usage:
 - Do not use `@general` unless the workflow is explicitly redesigned later.
 - Do not try to invoke built-in `build` or `plan`; they are primary agents, not validation subtasks.
 - When invoking shared runtime scripts for iOS work, set `PLATFORM=ios`, `TICKET_KEY`, and `APP_ROOT=/Users/vinaykumar/vymo/react-app`.
+- Reuse healthy shared Metro for iOS work and do not stop it during routine validation cleanup.
 - For iOS validation evidence, include the exact scheme, configuration, and bundle context used, or note why the intended scheme could not be launched.
 - Do not assume Metro or `yarn`-based runtime commands exist in the native Android repo.
 - For Android validation evidence, include the exact build/install command used, such as `assembleBetaMasterDebug` or `assembleAbcMasterDebug`, and note the package context that was validated or why it could not be run.

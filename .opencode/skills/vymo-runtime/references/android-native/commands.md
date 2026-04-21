@@ -1,4 +1,4 @@
-# Vymo Android Runtime Commands
+# Vymo Runtime: Android Native Commands
 
 ## Workspace
 
@@ -6,20 +6,35 @@
 - Native Android workspace root: `/Users/vinaykumar/vymo/android-base`
 - Preferred command runner: `./gradlew`
 
-## Preferred Command Order
+## Ticket Temp Layout
 
-Prefer Maestro MCP for launch and verification flows whenever it can replace direct `adb` usage reliably.
-When the steps are already known up front, prefer Maestro MCP `runFlow` to execute the full Android path in one pass.
+Use one repo-local ticket root per Jira issue:
 
-Run these from `/Users/vinaykumar/vymo/android-base`.
+- `./tmp/<ticket-key>/android/`
+
+Use these subfolders:
+
+- `logs/` for command output and runner logs
+- `evidence/` for screenshots and captured artifacts
+- `runtime/` for ticket-scoped service metadata
+- `reports/` for optional local handoff files
 
 Create the repo-local temp ticket tree before writing artifacts:
 
 ```sh
 export PLATFORM=android
 export TICKET_KEY=<jira-ticket-key>
-/Users/vinaykumar/vymo/workiq/oncall-ai-agent-open-code/.opencode/skills/vymo-react-native-runtime/scripts/create-session-dirs.sh
+/Users/vinaykumar/vymo/workiq/oncall-ai-agent-open-code/.opencode/skills/vymo-runtime/scripts/create-session-dirs.sh
 ```
+
+That helper is shared for repo-local ticket artifacts only. It does not imply that Android uses Metro or the React Native runtime model.
+
+## Preferred Command Order
+
+Prefer Maestro MCP for launch and verification flows whenever it can replace direct `adb` usage reliably.
+When the steps are already known up front, prefer Maestro MCP `runFlow` to execute the full Android path in one pass.
+
+Run these from `/Users/vinaykumar/vymo/android-base`.
 
 - Inspect available Gradle tasks first:
 
@@ -125,6 +140,8 @@ Whenever Android runtime setup mattered, report:
 
 - platform
 - app root
+- ticket key
+- temp ticket root
 - gradle task or module command used
 - app launch command
 - package or application id context used

@@ -16,7 +16,7 @@ permission:
   edit: deny
   bash:
     "*": ask
-    "/Users/vinaykumar/vymo/workiq/oncall-ai-agent-open-code/.opencode/skills/vymo-react-native-runtime/scripts/*": allow
+    "/Users/vinaykumar/vymo/workiq/oncall-ai-agent-open-code/.opencode/skills/vymo-runtime/scripts/*": allow
     "pwd": allow
     "ls*": allow
     "find *": allow
@@ -53,9 +53,7 @@ permission:
   webfetch: deny
   skill:
     "*": deny
-    "vymo-react-native-runtime": allow
-    "vymo-ios-runtime": allow
-    "vymo-android-runtime": allow
+    "vymo-runtime": allow
     "vymo-app": allow
 ---
 
@@ -72,8 +70,8 @@ Primary responsibilities:
 - Read the triage handoff first and preserve its `OpenCode Session ID`.
 - Read and preserve the latest `Jira Context Snapshot`.
 - Load runtime skills by platform:
-  - `ios` -> `vymo-react-native-runtime` plus `vymo-ios-runtime`
-  - `android` -> `vymo-android-runtime`
+  - `ios` -> `vymo-runtime`
+  - `android` -> `vymo-runtime`
 - Load `vymo-app` only when Maestro or other device-control work needs the actual user-visible app flow.
 - Track which white-label app is under test:
   - `Vymo`
@@ -93,7 +91,7 @@ Primary responsibilities:
 - If no explicit source branch is provided, default reproduction to the latest remote `master`.
 - If branch checkout is blocked by local changes, safely stash them with a descriptive message instead of forcing cleanup.
 - Use repo-local temp paths under `./tmp/{ticketKey}/{platform}/...` for evidence, logs, and runtime artifacts.
-- Before writing any evidence, logs, or runtime files, create the ticket temp tree with `.opencode/skills/vymo-react-native-runtime/scripts/create-session-dirs.sh`.
+- Before writing any evidence, logs, or runtime files, create the ticket temp tree with `.opencode/skills/vymo-runtime/scripts/create-session-dirs.sh`.
 - If the issue is not reproducible, post a concise Jira comment with what was tested and why the current result looks healthy.
 - Propose Jira workflow state changes when the ticket should reflect a real workflow change such as blocked, needs-info, invalid, or actively in progress, but do not mutate Jira workflow fields directly yourself.
 - When a blocked or non-reproducible result needs a follow-up from a specific person, tag only a verified Jira user from the issue context, usually the reporter or the latest relevant commenter.
@@ -106,6 +104,7 @@ Tool usage policy:
 - Save screenshots or other evidence only under the repo-local ticket temp tree, typically `./tmp/{ticketKey}/{platform}/evidence/...`.
 - Use the shared temp-dir helper so `logs/`, `evidence/`, `runtime/`, and `reports/` exist before writing artifacts.
 - Only use the shared Metro/runtime scripts for the React Native iOS workspace.
+- Reuse healthy shared Metro for iOS work and do not stop it during routine ticket cleanup.
 - For iOS logs and evidence, record the exact scheme and bundle context used, such as `Vymo`, `Vymo-Staging`, `ABC Stellar`, or `ABC Stellar - Staging`.
 - Do not assume Metro is required for the native Android repo.
 - For Android logs and evidence, record the exact build/install target used, such as `betaMasterDebug` or `abcMasterDebug`, plus the package context that was launched.

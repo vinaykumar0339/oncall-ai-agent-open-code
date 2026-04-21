@@ -26,10 +26,10 @@ This repository defines an end-to-end OpenCode workflow for an on-call mobile en
   - React Native iOS native dir: `/Users/vinaykumar/vymo/react-app/iOS`
   - Android app root: `/Users/vinaykumar/vymo/android-base`
   - Android native workspace root: `/Users/vinaykumar/vymo/android-base`
-- Runtime skills are split by concern:
-  - `vymo-react-native-runtime` for the React Native workspace in `/Users/vinaykumar/vymo/react-app`, including Metro handling, temp-path rules, and reporting requirements
-  - `vymo-ios-runtime` for iOS-specific setup and launch behavior inside the React Native workspace
-  - `vymo-android-runtime` for the native Android workspace in `/Users/vinaykumar/vymo/android-base`
+- Runtime skill:
+  - `vymo-runtime` for local runtime setup, temp-path rules, reporting requirements, and platform routing
+  - `vymo-runtime` loads the iOS React Native reference for `/Users/vinaykumar/vymo/react-app`, including Metro handling and iOS launch behavior
+  - `vymo-runtime` loads the Android native reference for `/Users/vinaykumar/vymo/android-base`
 
 ## Handoff Contract
 
@@ -73,7 +73,8 @@ Do not rely on long conversational memory when these facts can be preserved expl
 - Use the native `OpenCode Session ID` for thread continuity across days and resumes. Do not invent a separate workflow id.
 - When starting a ticket thread, prefer an OpenCode session title that starts with the Jira key, for example `ABC-123 login crash`.
 - Resume the same OpenCode thread with the native session id instead of starting a new thread for the same ticket when possible.
-- Store runtime and evidence artifacts only under `./tmp/{ticketKey}/{platform}/`.
+- Store ticket-scoped runtime and evidence artifacts under `./tmp/{ticketKey}/{platform}/`.
+- Shared workspace services that are intentionally reused across tickets, such as the React Native Metro server, may keep workspace-scoped service state under `./tmp/_workspace/...` as long as ticket evidence and reports still stay under the ticket temp tree.
 - Use this subfolder layout:
   - `logs/` for command and runner logs
   - `evidence/` for screenshots and captured artifacts

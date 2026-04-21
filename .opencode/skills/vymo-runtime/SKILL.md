@@ -1,0 +1,50 @@
+---
+name: vymo-runtime
+description: Use when a task needs local runtime setup, app launch guidance, shared Metro handling, temp artifact layout, or runtime reporting for the Vymo mobile workspaces.
+---
+
+# Vymo Runtime
+
+Use this skill when a task needs local runtime setup or runtime troubleshooting for the app workspaces.
+
+Workspace scope:
+- iOS React Native workspace: `/Users/vinaykumar/vymo/react-app`
+- iOS native dir inside that workspace: `/Users/vinaykumar/vymo/react-app/iOS`
+- Android native workspace: `/Users/vinaykumar/vymo/android-base`
+
+Platform coverage:
+- `ios`: React Native workspace with iOS-specific launch behavior
+- `android`: native Android Gradle workspace
+
+## Workflow
+
+1. Identify the platform first:
+   - `ios`
+   - `android`
+2. Keep ticket artifacts under `./tmp/{ticketKey}/{platform}/...`.
+3. Before writing ticket artifacts, create the ticket temp tree with [scripts/create-session-dirs.sh](scripts/create-session-dirs.sh).
+4. Load the matching platform reference:
+   - `ios` -> [references/ios-react-native/commands.md](references/ios-react-native/commands.md)
+   - `android` -> [references/android-native/commands.md](references/android-native/commands.md)
+5. For iOS work:
+   - treat Metro as a shared workspace service
+   - reuse healthy Metro before starting a new one
+   - stop Metro only for explicit cleanup or recovery
+6. For Android work:
+   - do not assume Metro or `yarn start` is part of the repo
+   - use native Gradle and device/emulator flows
+7. In runtime reporting, always include:
+   - platform
+   - app root
+   - OpenCode session id when available
+   - temp ticket root
+   - any shared runtime state that mattered
+   - any local runtime blocker that could affect confidence
+
+## Guardrails
+
+- Do not frame Android as a React Native runtime.
+- Do not frame `react-app` support as a generic cross-platform React Native runtime when current runtime automation is specifically for iOS work in that workspace.
+- Do not treat Metro as ticket-owned background state.
+- Do not write ticket evidence or reports into `./tmp/_workspace/...`.
+- Do not load both platform references unless a task genuinely spans both workspaces.
