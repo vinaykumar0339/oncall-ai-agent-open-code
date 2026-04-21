@@ -43,8 +43,10 @@ Run these from `/Users/vinaykumar/vymo/android-base`.
 ```
 
 - Determine the Android app kind from verified flavor, client, or application id context before choosing a build target.
+- Prefer the matching debug variant first after the app kind is identified, unless the ticket or verified runtime context explicitly requires another variant.
 - Use `betaMasterDebug` for the default Vymo app debug flow.
 - Use `abcMasterDebug` for the ABC white-label debug flow.
+- `android-base` does not expose an iOS-style `config-prepare` scheme-switch command in this repo. Android runtime selection is done through the chosen Gradle variant plus the required local environment file mentioned in the repo README.
 - Only use another Android variant when the ticket explicitly calls for a different verified target.
 - Prefer repo-documented assemble or bundle tasks for the requested flavor/build type.
 - Use module-aware Gradle commands for targeted verification when full variant builds are unnecessary.
@@ -67,6 +69,8 @@ Documented examples from the repo README:
 
 Use these app-target defaults unless the ticket or verified runtime context says otherwise:
 
+- Preferred first choice for reproduction and validation: the matching debug variant for the identified app kind
+- No extra repo-local runtime config-switch command is required before changing Android variants; switch by selecting the correct verified Gradle variant directly
 - Default Vymo debug variant: `betaMasterDebug`
 - Default Vymo release variant: `vymo_2_0MasterRelease`
 - Default Vymo feature-testing variant: `vymo_2_0MasterFeature_testing`

@@ -38,10 +38,10 @@ Workflow specialists:
 - `jira-context`: builds or refreshes the canonical Jira context snapshot that every later stage should preserve.
 - `jira-workflow`: applies real Jira workflow transitions or field mutations after another stage proposes a deliberate Jira state update.
 - `triage`: analyzes the Jira issue, decides whether the workflow is blocked or ready for reproduction, and prepares the reproduction packet.
-- `reproducible`: verifies the issue on a device or simulator, gathers evidence, and comments in Jira when a non-reproducible result needs justification.
-- `fix`: implements the smallest safe fix and runs targeted local verification.
-- `validation`: reruns the relevant checks, verifies the user-visible flow, and decides whether the change is ready to ship.
-- `delivery`: raises or updates the PR, requests default reviewers, and posts the Jira delivery update when validation passes.
+- `reproducible`: verifies the issue on a device or simulator, gathers evidence, and comments in Jira when a non-reproducible or blocked result needs outside visibility.
+- `fix`: implements the smallest safe fix, runs targeted local verification, and comments in Jira when fix work is blocked and a human needs to resolve something.
+- `validation`: reruns the relevant checks, verifies the user-visible flow, and comments in Jira when validation is blocked or fails for a human-actionable reason.
+- `delivery`: raises or updates the PR, requests default reviewers, and posts Jira comments for delivery outcomes or delivery blockers when validation has already passed.
 
 Platform routing rule:
 - `ios` work uses `/Users/vinaykumar/vymo/react-app`
@@ -61,13 +61,13 @@ Workflow:
 3. Preserve the same `OpenCode Session ID` and latest `Jira Context Snapshot` across every stage when the caller provides them.
 4. Treat one Jira ticket as one long-lived OpenCode thread and resume that same thread on later webhook-driven updates.
 5. If new human public comments arrive while a run is already in progress, refresh `jira-context` before continuing whenever those comments materially change ticket facts.
-6. If triage returns `BLOCKED`, stop and report the blocker.
+6. If triage returns `BLOCKED`, stop and report the blocker. If Jira commenting was available, require triage to have posted or attempted a blocker comment. If it did not, surface that explicitly as a workflow gap instead of silently reporting `not commented`.
 7. If triage returns a non-`none` `Suggested Jira workflow action`, invoke `jira-workflow` before moving on when the ticket's actual Jira state should reflect that checkpoint.
 8. If triage returns `READY_FOR_REPRODUCTION`, invoke `reproducible` with the latest Jira context and reproduction handoff.
 9. If reproduction returns a non-`none` `Suggested Jira workflow action`, invoke `jira-workflow` before moving on when the ticket's actual Jira state should reflect that checkpoint.
 10. If reproduction returns `REPRODUCED` and code workspace context exists, invoke `fix`.
 11. If `fix` returns a non-`none` `Suggested Jira workflow action`, invoke `jira-workflow` before moving on when the ticket's actual Jira state should reflect that checkpoint.
-12. If `fix` returns `FIX_BLOCKED`, stop and report the blocker.
+12. If `fix` returns `FIX_BLOCKED`, stop and report the blocker. If Jira commenting was available, require fix to have posted or attempted a blocker comment. If it did not, surface that explicitly as a workflow gap instead of silently reporting `not commented`.
 13. If `fix` or `validation` recommends human handoff for a critical or difficult issue, stop the autonomous loop and surface that recommendation clearly.
 14. If `fix` returns `FIX_APPLIED` or `FIX_PARTIAL`, invoke `validation`.
 15. If validation returns a non-`none` `Suggested Jira workflow action`, invoke `jira-workflow` before moving on when the ticket's actual Jira state should reflect that checkpoint.
@@ -95,6 +95,8 @@ Operating rules:
 - Treat Jira comments and Jira workflow state as different things:
   - stage agents may comment when their stage needs external visibility
   - only `jira-workflow` should change actual Jira workflow fields such as status, priority, labels, assignee, or resolution
+- When a stage returns a blocked or cannot-proceed result, prefer a Jira-safe blocker comment that explains the failed step, what was tried, and what a human should fix next.
+- If a blocked stage reports `Jira action: not commented` even though an issue key and Jira comment capability were available, treat that as an operational gap and call it out plainly in the final workflow summary.
 - When a stage recommends a Jira workflow mutation, require it to express that as `Suggested Jira workflow action` instead of mutating the issue directly.
 - When an issue key is known, prefer an OpenCode session title that starts with that ticket id so resuming the same thread later is operationally obvious.
 - Branches must use `type/ticket-id-description`.
@@ -121,7 +123,7 @@ Final response format:
 - `Validation summary:` short summary or `Not run`
 - `Delivery summary:` short summary or `Not run`
 - `PR link:` URL or `None`
-- `Jira action:` what was commented or why no comment was posted
+- `Jira action:` what was commented, whether comment posting failed, or whether a blocker comment was expected but missing
 - `Jira workflow summary:` what actual Jira workflow mutation was applied, skipped, or blocked
 - `Human handoff recommendation:` `none` or a clear recommendation with reason and suggested owner
 - `Next step:` the best operational next step

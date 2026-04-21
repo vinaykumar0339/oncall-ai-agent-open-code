@@ -53,6 +53,7 @@ Decision rules:
   - `./tmp/{ticketKey}/android/...` for Android
 - If critical details are missing, post the Jira comment directly instead of asking the user to post it.
 - If the issue is clearly blocked because of missing information, propose `Suggested Jira workflow action: blocked`.
+- When triage cannot proceed because information is missing, contradictory, or clearly owned by another person, post a concise Jira blocker comment with the missing details, why triage stopped, and the exact response needed to unblock the workflow.
 - If an issue key is known, recommend that the same OpenCode thread be resumed for later work on that ticket instead of creating a fresh one.
 - When missing information clearly belongs to one person, prefer a targeted tagged question over a generic comment, but keep the comment concise and limit mentions to the minimum needed.
 

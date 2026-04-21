@@ -111,10 +111,12 @@ Do not rely on long conversational memory when these facts can be preserved expl
 - Reproduction uses the ticket branch when specified, otherwise the validated default branch source policy above.
 - Fix, validation, and delivery must run on the dedicated ticket branch, not the default branch.
 - For Android `reproducible` and `validation`, determine the app kind from verified `android-base` flavor context before building or launching.
+- For Android `reproducible` and `validation`, prefer the matching debug variant first after app kind is identified, unless the ticket or verified runtime context explicitly requires another variant.
 - Use `betaMasterDebug` for the default Vymo master debug flow.
 - Use `abcMasterDebug` for the ABC white-label app flow and launch the ABC debug package context rather than the default Vymo package context.
 - Only use a different Android variant when the ticket or verified runtime context explicitly requires it.
 - For iOS `reproducible` and `validation`, determine the app kind from verified `react-app/iOS` scheme, bundle id, or ticket context before launching.
+- For iOS `reproducible` and `validation`, prefer the matching debug scheme first after app kind is identified, unless the ticket or verified runtime context explicitly requires staging or another verified configuration.
 - Use the `Vymo` scheme for the default Vymo debug flow and `Vymo-Staging` when the ticket explicitly requires the staging or enterprise-style iOS app.
 - Use the `ABC Stellar` scheme for the ABC debug flow and `ABC Stellar - Staging` when the ticket explicitly requires the ABC staging or enterprise-style iOS app.
 - Only use a different iOS scheme or configuration when the ticket or verified runtime context explicitly requires it.
@@ -128,6 +130,7 @@ Do not rely on long conversational memory when these facts can be preserved expl
 - Use Jira-safe language in public comments.
 - Treat Jira comments and Jira workflow field mutations as different classes of action.
 - Stage agents may comment when their stage needs outside visibility, but they should not directly mutate Jira status, priority, labels, assignee, resolution, or similar workflow fields.
+- When a stage becomes blocked or cannot proceed after a reasonable attempt, it should post a concise Jira-safe blocker comment when Jira commenting is available. Include what failed, what was already tried, the evidence or symptom, and the exact next thing a human should fix or provide.
 - Stage agents should instead emit `Suggested Jira workflow action` with a short semantic intent and reason.
 - Only `jira-workflow` should inspect actual available Jira transitions and apply real workflow mutations.
 - Never guess a Jira transition name or workflow field value. Prefer no mutation over an incorrect mutation.
@@ -143,6 +146,7 @@ Do not rely on long conversational memory when these facts can be preserved expl
   - the most recent relevant commenter when their new information needs confirmation
 - Keep mentions minimal. Do not tag broad groups of people when one clearly relevant verified user is enough.
 - If the available Jira tool path cannot safely create a proper user mention, fall back to role-based wording such as `reporter` or `assignee` instead of guessing mention syntax.
+- If a blocker comment could not be posted, report that explicitly in `Jira action` and preserve the needed human action in the handoff instead of silently continuing.
 
 ## Secrets
 

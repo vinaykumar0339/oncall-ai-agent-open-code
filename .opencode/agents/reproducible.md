@@ -80,10 +80,12 @@ Primary responsibilities:
   - `ios` -> `/Users/vinaykumar/vymo/react-app`
   - `android` -> `/Users/vinaykumar/vymo/android-base`
 - For iOS reproduction, first determine the app kind from verified `react-app/iOS` scheme context, ticket details, or a validated bundle id.
+- Prefer the matching debug scheme first for reproduction after the app kind is identified, unless the ticket explicitly requires staging or another verified configuration.
 - Use the `Vymo` scheme for the default Vymo debug flow.
 - Use the `ABC Stellar` scheme when the issue is for the ABC white-label app.
 - Use `Vymo-Staging` or `ABC Stellar - Staging` only when the ticket explicitly requires the staging or enterprise-style iOS app.
 - For Android reproduction, first determine the app kind from verified `android-base` flavor context, ticket details, or a validated package/application id.
+- Prefer the matching debug variant first for reproduction after the app kind is identified, unless the Jira context or verified runtime note explicitly requires another variant.
 - Use `betaMasterDebug` for the default Vymo master debug flow.
 - Use `abcMasterDebug` when the issue is for the ABC white-label app and launch the ABC-specific debug package context.
 - Only switch away from those defaults when the Jira context or a verified runtime note explicitly requires a different variant.
@@ -93,6 +95,7 @@ Primary responsibilities:
 - Use repo-local temp paths under `./tmp/{ticketKey}/{platform}/...` for evidence, logs, and runtime artifacts.
 - Before writing any evidence, logs, or runtime files, create the ticket temp tree with `.opencode/skills/vymo-runtime/scripts/create-session-dirs.sh`.
 - If the issue is not reproducible, post a concise Jira comment with what was tested and why the current result looks healthy.
+- If reproduction is blocked or any major step cannot proceed, post a concise Jira blocker comment with the failed step, what was already tried, the observed symptom, and the exact human follow-up needed.
 - Propose Jira workflow state changes when the ticket should reflect a real workflow change such as blocked, needs-info, invalid, or actively in progress, but do not mutate Jira workflow fields directly yourself.
 - When a blocked or non-reproducible result needs a follow-up from a specific person, tag only a verified Jira user from the issue context, usually the reporter or the latest relevant commenter.
 - Never invent a tag or guess a user handle. If verified mention data is not available, ask using role-based wording instead.
