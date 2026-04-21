@@ -30,6 +30,7 @@ This repository defines an end-to-end OpenCode workflow for an on-call mobile en
   - `vymo-runtime` for local runtime setup, temp-path rules, reporting requirements, and platform routing
   - `vymo-runtime` loads the iOS React Native reference for `/Users/vinaykumar/vymo/react-app`, including Metro handling and iOS launch behavior
   - `vymo-runtime` loads the Android native reference for `/Users/vinaykumar/vymo/android-base`
+  - `vymo-runtime` may use `reactotron-mcp` only for the iOS React Native workspace to inspect API request and response traffic during reproduction, debugging, and validation
 
 ## Handoff Contract
 
@@ -80,6 +81,7 @@ Do not rely on long conversational memory when these facts can be preserved expl
   - `evidence/` for screenshots and captured artifacts
   - `runtime/` for pidfiles and service state
   - `reports/` for any optional local summaries
+- For iOS React Native tickets, API-call summaries derived from `reactotron-mcp` should stay in the ticket temp tree and be treated as local debugging evidence, not as Jira-safe raw output
 - If the caller or webhook layer knows the current OpenCode session id, it should pass that exact value into the workflow handoff and runtime environment.
 - If the native session id is unavailable in a given entrypoint, preserve `OpenCode Session ID: Unknown` rather than generating a surrogate id in the agent prompts.
 - Do not write new workflow artifacts to `/tmp` when a repo-local temp path is possible.
@@ -116,10 +118,13 @@ Do not rely on long conversational memory when these facts can be preserved expl
 - Use `abcMasterDebug` for the ABC white-label app flow and launch the ABC debug package context rather than the default Vymo package context.
 - Only use a different Android variant when the ticket or verified runtime context explicitly requires it.
 - For iOS `reproducible` and `validation`, determine the app kind from verified `react-app/iOS` scheme, bundle id, or ticket context before launching.
-- For iOS `reproducible` and `validation`, prefer the matching debug scheme first after app kind is identified, unless the ticket or verified runtime context explicitly requires staging or another verified configuration.
-- Use the `Vymo` scheme for the default Vymo debug flow and `Vymo-Staging` when the ticket explicitly requires the staging or enterprise-style iOS app.
-- Use the `ABC Stellar` scheme for the ABC debug flow and `ABC Stellar - Staging` when the ticket explicitly requires the ABC staging or enterprise-style iOS app.
+- For iOS `reproducible` and `validation`, default to the matching debug scheme after the app kind is identified, even when the ticket was reported against a UAT or staging-distributed app.
+- Treat ticket mentions of UAT or staging as environment context, not as an automatic instruction to launch the staging iOS scheme.
+- Use the `Vymo` scheme for the default Vymo reproduce and validation flow. Use `Vymo-Staging` only when the human request or verified runtime evidence shows the issue is specific to the staging or enterprise iOS app itself.
+- Use the `ABC Stellar` scheme for the default ABC reproduce and validation flow. Use `ABC Stellar - Staging` only when the human request or verified runtime evidence shows the issue is specific to the ABC staging or enterprise iOS app itself.
 - Only use a different iOS scheme or configuration when the ticket or verified runtime context explicitly requires it.
+- For iOS React Native work, `reproducible`, `fix`, and `validation` may inspect Reactotron network logs to understand request shape, response payloads, HTTP status, and likely backend versus client behavior before deciding the next action.
+- Never route native Android work through `reactotron-mcp` unless the Android workspace later gains an explicitly supported React Native runtime that is documented in this repo.
 - If branch switching is blocked by local changes, prefer a descriptive stash over destructive cleanup.
 - Never use force checkout, hard reset, clean, or destructive removal to satisfy branch policy.
 - `fix` owns the main implementation path by default. If `general` is ever used, keep it limited to bounded side work that does not take over the critical code edit.
@@ -137,6 +142,7 @@ Do not rely on long conversational memory when these facts can be preserved expl
 - Treat priority changes as high-impact. Raise or lower priority only when the evidence clearly justifies it.
 - Use `commentVisibility: { type: "group", value: "jira-users" }` unless the user explicitly supplies a different verified audience.
 - Do not include raw local filesystem paths, local usernames, or other internal-only machine identifiers in Jira comments unless the user explicitly asks.
+- Do not paste raw Reactotron request or response bodies, auth tokens, cookies, or user-sensitive payloads into Jira comments. Summarize only the minimum safe evidence needed for human coordination.
 - Delivery should post a Jira update that links the PR and summarizes the validated change when an issue key is available.
 - When a Jira comment needs action or confirmation from a specific person, tag only a verified Jira user such as the reporter, assignee, or a recent relevant commenter.
 - Never guess a person to tag. Only tag when the Jira issue/comment data provides a verified identity that clearly maps to the person you need.

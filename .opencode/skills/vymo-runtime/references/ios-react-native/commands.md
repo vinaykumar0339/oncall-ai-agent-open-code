@@ -59,6 +59,24 @@ The helper scripts keep shared Metro state under:
 
 Ticket temp trees are still used for screenshots, logs, and reports that belong to the current Jira issue.
 
+## Reactotron Network Inspection
+
+`reactotron-mcp` is available for the iOS React Native workspace so agents can inspect API calls while reproducing, debugging, or validating a ticket.
+
+Use it when:
+
+- the issue appears API-driven or state-driven
+- the next action depends on the exact request payload, response payload, status code, or backend error shape
+- the agent needs to separate client-side bugs from backend, auth, config, or data issues
+
+Use it as an evidence source, not as a replacement for user-visible validation:
+
+- prefer sanitized summaries in handoffs
+- store any local notes or summaries under `./tmp/<ticket-key>/ios/reports/`
+- keep screenshots and captured artifacts under `./tmp/<ticket-key>/ios/evidence/`
+- do not treat Reactotron as in scope for `/Users/vinaykumar/vymo/android-base`
+- do not copy raw auth tokens, cookies, or sensitive payloads into Jira comments
+
 Export these variables before running the Metro helper scripts when possible:
 
 ```sh
@@ -120,11 +138,15 @@ When the steps are already known up front, prefer Maestro MCP `runFlow` to execu
 
 Before launching iOS, make sure the repo config matches the intended environment:
 
+- Default assumption: use `DEBUG` for reproduce, fix verification, and validation, even when the ticket was reported against a UAT or staging-distributed app
+- Treat ticket mentions of `staging` or `uat` as report context, not as an automatic reason to launch `Vymo-Staging` or `ABC Stellar - Staging`
+- Only choose a staging scheme when a human instruction or verified runtime evidence shows the issue is specific to `Vymo-Staging`, `ABC Stellar - Staging`, `com.getvymo.ios.enterprise`, or `com.getvymo.iosabc.enterprise`
 - Run `yarn config-prepare DEBUG` before `Vymo` or `ABC Stellar`
 - Run `yarn config-prepare STAGING` before `Vymo-Staging` or `ABC Stellar - Staging`
 - Run `yarn config-prepare PROD` only for production/release-oriented flows that explicitly need it
 - Re-run `yarn config-prepare ...` whenever you switch between debug/staging/prod or change scheme family in a way that changes the expected iOS config set
 - This is important in `react-app` because the iOS build copies `GoogleService-Info.plist` from `iOS/Config/<Env>/...`; stale or missing config can break launch/build when switching schemes or environments
+- If a ticket says only `iOS`, `iPhone`, `Vymo`, `ABC`, `staging`, or `uat` and does not describe a staging-only app requirement, treat that as `DEBUG`
 
 From the app root:
 
@@ -153,6 +175,18 @@ yarn config-prepare STAGING
 yarn ios --target "ABC Stellar" --scheme "ABC Stellar - Staging"
 ```
 
+Prefer these default debug launches unless a human instruction or verified runtime fact says the staging app itself is required:
+
+```sh
+export PLATFORM=ios
+yarn config-prepare DEBUG
+yarn ios --target "Vymo" --scheme "Vymo"
+
+export PLATFORM=ios
+yarn config-prepare DEBUG
+yarn ios --target "ABC Stellar" --scheme "ABC Stellar"
+```
+
 When launching on a specific simulator/device, keep the same explicit target rule:
 
 ```sh
@@ -171,6 +205,7 @@ yarn pod-install
 ## App Identity Clues
 
 - Preferred first choice for reproduction and validation: the matching debug scheme for the identified app kind
+- If staging is selected, the runtime report should include the exact human instruction or verified runtime fact that justified not using debug
 - Preferred first choice for reproduction and validation launch command for default Vymo iOS: `yarn ios --target "Vymo" --scheme "Vymo"`
 - Default Vymo debug scheme: `Vymo`
 - Default Vymo staging scheme: `Vymo-Staging`
@@ -196,6 +231,8 @@ Whenever iOS runtime setup mattered, report:
 - temp ticket root
 - shared workspace runtime root when Metro mattered
 - Metro status: reused or started
+- Reactotron status: not used, reused, or used for API inspection
+- Reactotron conclusion: short sanitized summary of the request and response evidence that influenced the next step
 - app launch command
 - scheme and bundle context used
 - pod-install command if used

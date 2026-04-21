@@ -9,6 +9,7 @@ tools:
   atlassian_addCommentToJiraIssue: true
   bitbucket_*: false
   maestro-mcp_*: true
+  reactotron-mcp_*: true
   websearch: false
 permission:
   edit: deny
@@ -81,10 +82,12 @@ Primary responsibilities:
   - `ios` -> `/Users/vinaykumar/vymo/react-app`
   - `android` -> `/Users/vinaykumar/vymo/android-base`
 - For iOS validation, first determine the app kind from verified `react-app/iOS` scheme context, ticket details, or a validated bundle id.
-- Prefer the matching debug scheme first for validation after the app kind is identified, unless the ticket explicitly requires staging or another verified configuration.
+- Default to the matching debug scheme for validation after the app kind is identified, even when the ticket was reported against a UAT or staging-distributed app.
 - Use the `Vymo` scheme for the default Vymo debug flow.
 - Use the `ABC Stellar` scheme when the issue is for the ABC white-label app.
-- Use `Vymo-Staging` or `ABC Stellar - Staging` only when the ticket explicitly requires the staging or enterprise-style iOS app.
+- Use `Vymo-Staging` or `ABC Stellar - Staging` only when the human request or verified runtime evidence shows the issue is specific to the staging or enterprise-style iOS app itself.
+- Treat ticket mentions of `staging`, `uat`, or distributed enterprise testing as source context, not as an automatic reason to launch the staging scheme.
+- If the ticket only says `ios`, `iphone`, `Vymo`, `ABC`, `staging`, or `uat` without naming a staging-only app requirement, treat that as a debug build request.
 - For Android validation, first determine the app kind from verified `android-base` flavor context, ticket details, or a validated package/application id.
 - Prefer the matching debug variant first for validation after the app kind is identified, unless the ticket explicitly requires another verified variant.
 - Use `betaMasterDebug` for the default Vymo master debug flow.
@@ -109,7 +112,10 @@ Built-in agent usage:
 - When invoking shared runtime scripts for iOS work, set `PLATFORM=ios`, `TICKET_KEY`, and `APP_ROOT=/Users/vinaykumar/vymo/react-app`.
 - Reuse healthy shared Metro for iOS work and do not stop it during routine validation cleanup.
 - For iOS validation evidence, include the exact scheme, configuration, and bundle context used, or note why the intended scheme could not be launched.
+- When staging is selected for iOS validation, record the exact human instruction or verified runtime fact that justified not using debug.
+- For iOS React Native validation, use `reactotron-mcp` when confirming the fix depends on API request and response behavior, and record the sanitized conclusion that supports pass or fail.
 - Do not assume Metro or `yarn`-based runtime commands exist in the native Android repo.
+- Do not use `reactotron-mcp` for the native Android workspace.
 - For Android validation evidence, include the exact build/install command used, such as `assembleBetaMasterDebug` or `assembleAbcMasterDebug`, and note the package context that was validated or why it could not be run.
 - Use the shared temp-dir helper before generating repo-local logs, screenshots, or reports so artifact writes stay autonomous.
 
@@ -138,6 +144,7 @@ Output format:
 - `Validation scope:` short summary
 - `Automated checks:` commands run and outcome
 - `Device verification:` device, steps, and outcome
+- `API evidence:` sanitized request and response summary when Reactotron was used, otherwise `Not used`
 - `Observed result:` concise factual summary
 - `Residual risk:` short summary
 - `Delivery handoff:` only when validation passed. Include issue context, branch or diff context, short fix summary, checks that passed, and device validation summary

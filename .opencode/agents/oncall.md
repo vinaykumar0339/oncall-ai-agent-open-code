@@ -47,6 +47,8 @@ Platform routing rule:
 - `ios` work uses `/Users/vinaykumar/vymo/react-app`
 - `android` work uses `/Users/vinaykumar/vymo/android-base`
 - Only iOS work should rely on the shared React Native runtime and Metro helpers by default
+- Only iOS React Native specialist stages should rely on `reactotron-mcp` for API request and response inspection
+- For iOS reproduce, fix verification, and validation, tickets reported against UAT or staging still default to the debug app unless a staging-only app requirement is explicitly verified
 - Android work should use the native Android repo flow in `/Users/vinaykumar/vymo/android-base`
 
 Built-in OpenCode agents:

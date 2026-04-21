@@ -11,6 +11,7 @@ tools:
   atlassian_fetch: true
   atlassian_addCommentToJiraIssue: true
   maestro-mcp_*: true
+  reactotron-mcp_*: true
   websearch: false
 permission:
   edit: deny
@@ -80,10 +81,12 @@ Primary responsibilities:
   - `ios` -> `/Users/vinaykumar/vymo/react-app`
   - `android` -> `/Users/vinaykumar/vymo/android-base`
 - For iOS reproduction, first determine the app kind from verified `react-app/iOS` scheme context, ticket details, or a validated bundle id.
-- Prefer the matching debug scheme first for reproduction after the app kind is identified, unless the ticket explicitly requires staging or another verified configuration.
+- Default to the matching debug scheme for reproduction after the app kind is identified, even when the ticket was reported against a UAT or staging-distributed app.
 - Use the `Vymo` scheme for the default Vymo debug flow.
 - Use the `ABC Stellar` scheme when the issue is for the ABC white-label app.
-- Use `Vymo-Staging` or `ABC Stellar - Staging` only when the ticket explicitly requires the staging or enterprise-style iOS app.
+- Use `Vymo-Staging` or `ABC Stellar - Staging` only when the human request or verified runtime evidence shows the issue is specific to the staging or enterprise-style iOS app itself.
+- Treat ticket mentions of `staging`, `uat`, or distributed enterprise testing as source context, not as an automatic reason to launch the staging scheme.
+- If the ticket only says `ios`, `iphone`, `Vymo`, `ABC`, `staging`, or `uat` without naming a staging-only app requirement, treat that as a debug build request.
 - For Android reproduction, first determine the app kind from verified `android-base` flavor context, ticket details, or a validated package/application id.
 - Prefer the matching debug variant first for reproduction after the app kind is identified, unless the Jira context or verified runtime note explicitly requires another variant.
 - Use `betaMasterDebug` for the default Vymo master debug flow.
@@ -109,7 +112,11 @@ Tool usage policy:
 - Only use the shared Metro/runtime scripts for the React Native iOS workspace.
 - Reuse healthy shared Metro for iOS work and do not stop it during routine ticket cleanup.
 - For iOS logs and evidence, record the exact scheme and bundle context used, such as `Vymo`, `Vymo-Staging`, `ABC Stellar`, or `ABC Stellar - Staging`.
+- When staging is selected for iOS, record the exact human instruction or verified runtime fact that justified not using debug.
+- For iOS React Native reproduction, use `reactotron-mcp` when network traffic is relevant so you can inspect request and response evidence before deciding whether the issue is reproducible, backend-driven, auth-related, or environment-specific.
+- Treat Reactotron output as ticket-local debugging evidence. Summarize the request and response behavior safely instead of copying raw sensitive payloads into Jira comments.
 - Do not assume Metro is required for the native Android repo.
+- Do not use `reactotron-mcp` for the native Android workspace.
 - For Android logs and evidence, record the exact build/install target used, such as `betaMasterDebug` or `abcMasterDebug`, plus the package context that was launched.
 - When invoking shared runtime scripts for iOS work, set `PLATFORM=ios`, `TICKET_KEY`, and `APP_ROOT=/Users/vinaykumar/vymo/react-app`.
 

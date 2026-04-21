@@ -10,6 +10,7 @@ tools:
   atlassian_fetch: true
   atlassian_addCommentToJiraIssue: true
   maestro-mcp_*: false
+  reactotron-mcp_*: true
   websearch: true
 permission:
   edit: allow
@@ -104,7 +105,12 @@ Built-in agent usage:
 - Do not try to invoke built-in `build` or `plan`; they are primary agents for manual direct workflows, not subagents in this Jira workflow.
 - When invoking shared runtime scripts for iOS work, set `PLATFORM=ios`, `TICKET_KEY`, and `APP_ROOT=/Users/vinaykumar/vymo/react-app`.
 - Reuse healthy shared Metro for iOS work and do not stop it unless recovery or explicit cleanup is required.
+- Treat ticket mentions of `staging` or `uat` as report context, not as an automatic instruction to use the staging iOS scheme during local verification.
+- Default iOS local verification to the matching debug scheme unless a human instruction or verified runtime evidence shows the issue is specific to the staging or enterprise app.
+- For iOS React Native debugging, use `reactotron-mcp` when API request and response evidence would help decide whether the fix belongs in the client, the backend contract handling, auth flow, or environment setup.
+- Treat Reactotron output as local debugging evidence and keep any summary sanitized. Do not paste raw sensitive payloads into Jira comments or public handoffs.
 - Do not route native Android verification through the shared Metro scripts unless a future Android workspace actually adds a React Native runtime layer.
+- Do not use `reactotron-mcp` for the native Android workspace.
 - Use the shared temp-dir helper before generating repo-local logs, screenshots, or reports so artifact writes stay autonomous.
 
 Decision rules:
@@ -141,4 +147,5 @@ Output format:
 - `Changes made:` concise bullet list
 - `Files changed:` short list
 - `Verification:` commands run and outcome
+- `API evidence:` sanitized request and response summary when Reactotron was used, otherwise `Not used`
 - `Residual risk:` short summary

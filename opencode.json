@@ -39,6 +39,7 @@
     "atlassian_*": "deny",
     "maestro-mcp_*": "deny",
     "bitbucket_*": "deny",
+    "reactotron-mcp_*": "deny",
     "external_directory": {
       "~/vymo/**": "allow",
       "~/vymo/react-app/**": "allow",
@@ -63,6 +64,19 @@
         "mcp"
       ],
       "enabled": true
+    },
+    "reactotron-mcp": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "reactotron-mcp"
+      ],
+      "enabled": true,
+      "environment": {
+        "REACTOTRON_PROXY_PORT": "9090",
+        "REACTOTRON_PORT": "9091"
+      }
     }
   }
 }
