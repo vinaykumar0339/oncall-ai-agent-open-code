@@ -58,6 +58,76 @@ Primary responsibilities:
 - Do not guess user mentions. If verified mention data is unavailable or the Jira tool cannot safely render the mention, use role-based wording instead.
 - Treat the workflow as only partially complete if the PR succeeds but the Jira delivery comment or reviewer action fails.
 
+Bitbucket pipeline catalog for `vymo/react-app`:
+- Use this catalog when triggering pipelines so delivery does not depend on reading `bitbucket-pipelines.yml` at runtime.
+- Repository slug: `react-app`
+- Pipeline 1: `Generate Testing Build` (custom/manual trigger)
+- Required custom variables:
+  - `AppType` (allowed: `Vymo`, `ABC`; default: `Vymo`)
+  - `AppCenterAppName` (allowed: `vymo-ios-test`, `vymo-ios-uat`, `vymo-ios-security`, `vymo-ios-abc-security`; default: `vymo-ios-test`)
+  - `Destination` (free text App Center group; default: `Vymo-Internal`)
+  - `ReleaseNotes` (free text; default: `Release Notes`)
+  - `Environment` (allowed: `Staging`, `Beta`, `Pod 2`, `Pod 5`, `Pod 6`, `Pod 7`, `Pod 8`, `Pod 9`, `BHHC`, `Demo`, `Sandbox`, `AJE UAT`, `Debug Cluster`, `ASI Dev`, `AJE02 Staging`, `ABC Staging`, `ABC Pre-Prod`; default: `Staging`)
+  - `IsInternalReleaseBuild` (allowed: `false`, `true`; default: `false`)
+  - `DisableAnalytics` (allowed: `false`, `true`; default: `true`)
+- Pipeline 2: `Quick Code Check` (custom/manual trigger)
+- Required custom variables: none
+- Pipeline 3: pull request pipeline `**` (automatic trigger)
+- Required custom variables: none
+- Required Bitbucket runtime variables used by steps: `BITBUCKET_PR_DESTINATION_BRANCH`, `BITBUCKET_BRANCH`, `BITBUCKET_WORKSPACE`, `BITBUCKET_REPO_SLUG`, `BITBUCKET_PIPELINE_UUID`, `BITBUCKET_TOKEN`
+- Pipeline 4: branch pipeline `master` (automatic trigger)
+- Required custom variables: none
+- Pipeline 5: branch pipeline `release/staging` (automatic trigger)
+- Required custom variables: none
+- Pipeline 6: branch pipeline `release/production` (automatic trigger)
+- Required custom variables: none
+
+Pipeline execution rules:
+- For manual code checks, trigger `Quick Code Check`.
+- For manual iOS testing build uploads to App Center, trigger `Generate Testing Build` and provide every required custom variable explicitly.
+- Do not attempt to pass custom variables for automatic PR or branch pipelines.
+
+Bitbucket pipeline catalog for `vymo/android-base`:
+- Use this catalog when triggering pipelines so delivery does not depend on reading `bitbucket-pipelines.yml` at runtime.
+- Repository slug: `android-base`
+- Pipeline 1: `Generate Build & Upload` (custom/manual trigger)
+- Required custom variables:
+  - `AppType` (allowed: `Vymo`, `ABC`; default: `Vymo`)
+  - `BuildType` (allowed: `Feature`, `Release`; default: `Feature`)
+  - `AppCenterAppName` (allowed: `vymo-android-test`, `vymo-android-uat`, `vymo-android-production`, `vymo-android-security`; default: `vymo-android-test`)
+  - `Distribution` (free text App Center group; default: `jenkins-staging`)
+  - `ReleaseNotes` (free text; default: `Release Notes`)
+- Pipeline 2: `Unit Test` (custom/manual trigger)
+- Required custom variables: none
+- Required Bitbucket runtime variables used by steps: `BITBUCKET_PIPELINES_VARIABLES_PATH`
+- Pipeline 3: `Instrumentation Test` (custom/manual trigger)
+- Required custom variables: none
+- Required Bitbucket runtime variables used by steps: `BITBUCKET_PIPELINES_VARIABLES_PATH`
+- Pipeline 4: `All Tests (Parallel) with coverage` (custom/manual trigger)
+- Required custom variables: none
+- Required Bitbucket runtime variables used by steps: `BITBUCKET_PIPELINES_VARIABLES_PATH`
+- Pipeline 5: `All Tests (Sequential) with coverage` (custom/manual trigger)
+- Required custom variables: none
+- Required Bitbucket runtime variables used by steps: `BITBUCKET_PIPELINES_VARIABLES_PATH`
+- Pipeline 6: pull request pipeline `**` (automatic trigger)
+- Required custom variables: none
+- Required Bitbucket runtime variables used by steps: `BITBUCKET_PR_DESTINATION_BRANCH`, `BITBUCKET_BRANCH`, `BITBUCKET_WORKSPACE`, `BITBUCKET_REPO_SLUG`, `BITBUCKET_PIPELINE_UUID`, `BITBUCKET_TOKEN`, `BITBUCKET_PIPELINES_VARIABLES_PATH`
+- Pipeline 7: branch pipeline `master` (automatic trigger)
+- Required custom variables: none
+- Required Bitbucket runtime variables used by steps: `BITBUCKET_PIPELINES_VARIABLES_PATH`
+- Pipeline 8: branch pipeline `release/staging` (automatic trigger)
+- Required custom variables: none
+- Required Bitbucket runtime variables used by steps: `BITBUCKET_PIPELINES_VARIABLES_PATH`
+- Required repository or workspace variables for App Center validity check in staging build steps: `AppCenterAppName`, `Distribution`
+- Pipeline 9: branch pipeline `release/production` (automatic trigger)
+- Required custom variables: none
+- Required Bitbucket runtime variables used by steps: `BITBUCKET_PIPELINES_VARIABLES_PATH`
+
+Pipeline execution rules for `android-base`:
+- For manual Android build upload, trigger `Generate Build & Upload` and provide every required custom variable explicitly.
+- For manual Android checks without build upload, trigger one of: `Unit Test`, `Instrumentation Test`, `All Tests (Parallel) with coverage`, or `All Tests (Sequential) with coverage`.
+- Do not attempt to pass custom variables for automatic PR or branch pipelines.
+
 Decision rules:
 - `DELIVERY_COMPLETE` means the PR exists, reviewer assignment succeeded through defaults, and the Jira delivery comment was posted successfully when an issue key was available.
 - `DELIVERY_PARTIAL` means the PR was created or updated, but reviewer assignment or the Jira delivery comment failed afterward.
