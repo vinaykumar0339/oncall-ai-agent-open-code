@@ -134,6 +134,18 @@ tail -n 50 ./tmp/_workspace/react-native-runtime/logs/metro.log
 Prefer Maestro MCP for launch and verification flows whenever it can replace direct `xcrun` or `xcodebuild` usage reliably.
 When the steps are already known up front, prefer Maestro MCP `runFlow` to execute the full iOS path in one pass.
 
+## Rebuild Policy
+
+For `~/vymo/react-app`, default to Metro + launching an already installed app binary.
+
+- Do not run full app rebuild/install by default for JS/TS-only work.
+- Prefer relaunching existing app binaries with Metro for reproduce/fix verification/validation.
+- Run rebuild/install only when one of these is true:
+  - verified native edits under `~/vymo/react-app/iOS`
+  - Pod/dependency/native module changes that affect iOS binary linkage
+  - scheme, bundle id, or environment config changes requiring a new binary
+  - app is not installed on the target simulator/device
+
 ## Environment Config Preparation
 
 Before launching iOS, make sure the repo config matches the intended environment:

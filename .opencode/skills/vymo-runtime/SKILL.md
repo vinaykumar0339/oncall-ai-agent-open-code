@@ -30,6 +30,9 @@ Platform coverage:
    - treat Metro as a shared workspace service
    - reuse healthy Metro before starting a new one
    - stop Metro only for explicit cleanup or recovery
+   - default to using Metro with an already installed app for `~/vymo/react-app`
+   - do not trigger full iOS rebuild/install for JS/TS-only changes
+   - only rebuild when native changes are verified (for example `~/vymo/react-app/iOS` edits, Pod/native dependency changes, scheme or bundle changes, or app-not-installed state)
    - default launch and validation work to the debug app, not staging
    - treat ticket mentions of UAT or staging as report context, not as an automatic instruction to launch the staging app
    - only choose a staging scheme when a human instruction or verified runtime evidence shows the issue is specific to the staging app, enterprise app, staging scheme, or enterprise bundle id

@@ -31,6 +31,8 @@ This repository defines an end-to-end OpenCode workflow for an on-call mobile en
   - `vymo-runtime` loads the iOS React Native reference for `~/vymo/react-app`, including Metro handling and iOS launch behavior
   - `vymo-runtime` loads the Android native reference for `~/vymo/android-base`
   - `vymo-runtime` may use `reactotron-mcp` only for the iOS React Native workspace to inspect API request and response traffic during reproduction, debugging, and validation
+- API context skill:
+  - `vymo-react-app-api-context` for `~/vymo/react-app` endpoint maps focused on Hello screen and Login flows when `reactotron-mcp` evidence is needed
 
 ## Handoff Contract
 
@@ -123,6 +125,10 @@ Do not rely on long conversational memory when these facts can be preserved expl
 - Use the `Vymo` scheme for the default Vymo reproduce and validation flow. Use `Vymo-Staging` only when the human request or verified runtime evidence shows the issue is specific to the staging or enterprise iOS app itself.
 - Use the `ABC Stellar` scheme for the default ABC reproduce and validation flow. Use `ABC Stellar - Staging` only when the human request or verified runtime evidence shows the issue is specific to the ABC staging or enterprise iOS app itself.
 - Only use a different iOS scheme or configuration when the ticket or verified runtime context explicitly requires it.
+- Treat `react-app` as an iOS-only React Native runtime in this workflow.
+- For `react-app` iOS reproduce, fix verification, and validation, default to Metro + launching the already installed app.
+- Do not trigger full iOS rebuild/install by default for `react-app` when the change is JS/TS-only.
+- Only rebuild `react-app` iOS when there is verified native change context such as edits under `react-app/iOS`, Pod changes, native module changes, scheme or bundle changes, or when the app is not installed on the target simulator/device.
 - For iOS React Native work, `reproducible`, `fix`, and `validation` may inspect Reactotron network logs to understand request shape, response payloads, HTTP status, and likely backend versus client behavior before deciding the next action.
 - Never route native Android work through `reactotron-mcp` unless the Android workspace later gains an explicitly supported React Native runtime that is documented in this repo.
 - If branch switching is blocked by local changes, prefer a descriptive stash over destructive cleanup.
