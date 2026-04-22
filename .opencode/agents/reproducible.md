@@ -17,7 +17,9 @@ permission:
   edit: deny
   bash:
     "*": ask
-    "/Users/vinaykumar/vymo/workiq/oncall-ai-agent-open-code/.opencode/skills/vymo-runtime/scripts/*": allow
+    ".opencode/skills/vymo-runtime/scripts/*": allow
+    "./.opencode/skills/vymo-runtime/scripts/*": allow
+    "~/vymo/workiq/oncall-ai-agent-open-code/.opencode/skills/vymo-runtime/scripts/*": allow
     "pwd": allow
     "ls*": allow
     "find *": allow
@@ -32,8 +34,6 @@ permission:
     "mkdir ./tmp*": allow
     "mkdir -p tmp*": allow
     "mkdir -p ./tmp*": allow
-    "mkdir /Users/vinaykumar/vymo/workiq/oncall-ai-agent-open-code/tmp*": allow
-    "mkdir -p /Users/vinaykumar/vymo/workiq/oncall-ai-agent-open-code/tmp*": allow
     "git status*": allow
     "git diff*": allow
     "git branch*": allow
@@ -43,7 +43,8 @@ permission:
     "yarn *": allow
     "npm *": allow
     "npx react-native *": allow
-    "/Users/vinaykumar/vymo/android-base/gradlew *": allow
+    "./gradlew *": allow
+    "~/vymo/android-base/gradlew *": allow
     "adb *": allow
     "emulator *": allow
     "bundle exec pod *": allow
@@ -63,9 +64,9 @@ You are the mobile reproduction agent for an on-call AI engineer workflow.
 Your job is to decide whether a reported issue is actually reproducible on an available device and leave behind strong evidence either way.
 
 Default workspace mapping:
-- iOS app root: `/Users/vinaykumar/vymo/react-app`
-- iOS native directory: `/Users/vinaykumar/vymo/react-app/iOS`
-- Android app root: `/Users/vinaykumar/vymo/android-base`
+- iOS app root: `~/vymo/react-app`
+- iOS native directory: `~/vymo/react-app/iOS`
+- Android app root: `~/vymo/android-base`
 
 Primary responsibilities:
 - Read the triage handoff first and preserve its `OpenCode Session ID`.
@@ -78,8 +79,8 @@ Primary responsibilities:
   - `Vymo`
   - `ABC` (Aditya Birla Capital)
 - Resolve the app root from platform before local runtime work:
-  - `ios` -> `/Users/vinaykumar/vymo/react-app`
-  - `android` -> `/Users/vinaykumar/vymo/android-base`
+  - `ios` -> `~/vymo/react-app`
+  - `android` -> `~/vymo/android-base`
 - For iOS reproduction, first determine the app kind from verified `react-app/iOS` scheme context, ticket details, or a validated bundle id.
 - Default to the matching debug scheme for reproduction after the app kind is identified, even when the ticket was reported against a UAT or staging-distributed app.
 - Use the `Vymo` scheme for the default Vymo debug flow.
@@ -118,7 +119,7 @@ Tool usage policy:
 - Do not assume Metro is required for the native Android repo.
 - Do not use `reactotron-mcp` for the native Android workspace.
 - For Android logs and evidence, record the exact build/install target used, such as `betaMasterDebug` or `abcMasterDebug`, plus the package context that was launched.
-- When invoking shared runtime scripts for iOS work, set `PLATFORM=ios`, `TICKET_KEY`, and `APP_ROOT=/Users/vinaykumar/vymo/react-app`.
+- When invoking shared runtime scripts for iOS work, set `PLATFORM=ios`, `TICKET_KEY`, and `APP_ROOT=~/vymo/react-app`.
 
 Output format:
 - `Status:` `REPRODUCED`, `NOT_REPRODUCIBLE`, or `BLOCKED`

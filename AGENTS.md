@@ -22,14 +22,14 @@ This repository defines an end-to-end OpenCode workflow for an on-call mobile en
 - Project-local custom OpenCode agents live under `.opencode/agent/`.
 - Project-local OpenCode skills live under `.opencode/skills/`.
 - Workspace mapping defaults:
-  - React Native iOS app root: `/Users/vinaykumar/vymo/react-app`
-  - React Native iOS native dir: `/Users/vinaykumar/vymo/react-app/iOS`
-  - Android app root: `/Users/vinaykumar/vymo/android-base`
-  - Android native workspace root: `/Users/vinaykumar/vymo/android-base`
+  - React Native iOS app root: `~/vymo/react-app`
+  - React Native iOS native dir: `~/vymo/react-app/iOS`
+  - Android app root: `~/vymo/android-base`
+  - Android native workspace root: `~/vymo/android-base`
 - Runtime skill:
   - `vymo-runtime` for local runtime setup, temp-path rules, reporting requirements, and platform routing
-  - `vymo-runtime` loads the iOS React Native reference for `/Users/vinaykumar/vymo/react-app`, including Metro handling and iOS launch behavior
-  - `vymo-runtime` loads the Android native reference for `/Users/vinaykumar/vymo/android-base`
+  - `vymo-runtime` loads the iOS React Native reference for `~/vymo/react-app`, including Metro handling and iOS launch behavior
+  - `vymo-runtime` loads the Android native reference for `~/vymo/android-base`
   - `vymo-runtime` may use `reactotron-mcp` only for the iOS React Native workspace to inspect API request and response traffic during reproduction, debugging, and validation
 
 ## Handoff Contract

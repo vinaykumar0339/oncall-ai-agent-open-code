@@ -2,13 +2,13 @@
 
 ## Workspace
 
-- App root: `/Users/vinaykumar/vymo/react-app`
-- iOS native dir: `/Users/vinaykumar/vymo/react-app/iOS`
+- App root: `~/vymo/react-app`
+- iOS native dir: `~/vymo/react-app/iOS`
 - Preferred package manager: `yarn`
 
 ## Repo Scripts
 
-Run these from `/Users/vinaykumar/vymo/react-app`.
+Run these from `~/vymo/react-app`.
 
 - Install JS deps: `yarn install`
 - Start Metro: `yarn start`
@@ -44,12 +44,12 @@ Create them with the helper before writing ticket artifacts:
 ```sh
 export PLATFORM=ios
 export TICKET_KEY=<jira-ticket-key>
-/Users/vinaykumar/vymo/workiq/oncall-ai-agent-open-code/.opencode/skills/vymo-runtime/scripts/create-session-dirs.sh
+~/vymo/workiq/oncall-ai-agent-open-code/.opencode/skills/vymo-runtime/scripts/create-session-dirs.sh
 ```
 
 ## Shared Metro Runtime Layout
 
-Metro is a shared workspace service for `/Users/vinaykumar/vymo/react-app`, not a ticket-owned process.
+Metro is a shared workspace service for `~/vymo/react-app`, not a ticket-owned process.
 
 The helper scripts keep shared Metro state under:
 
@@ -74,7 +74,7 @@ Use it as an evidence source, not as a replacement for user-visible validation:
 - prefer sanitized summaries in handoffs
 - store any local notes or summaries under `./tmp/<ticket-key>/ios/reports/`
 - keep screenshots and captured artifacts under `./tmp/<ticket-key>/ios/evidence/`
-- do not treat Reactotron as in scope for `/Users/vinaykumar/vymo/android-base`
+- do not treat Reactotron as in scope for `~/vymo/android-base`
 - do not copy raw auth tokens, cookies, or sensitive payloads into Jira comments
 
 Export these variables before running the Metro helper scripts when possible:
@@ -82,13 +82,13 @@ Export these variables before running the Metro helper scripts when possible:
 ```sh
 export PLATFORM=ios
 export TICKET_KEY=<jira-ticket-key>
-export APP_ROOT=/Users/vinaykumar/vymo/react-app
+export APP_ROOT=~/vymo/react-app
 ```
 
 Optional override:
 
 ```sh
-export REPO_ROOT=/Users/vinaykumar/vymo/workiq/oncall-ai-agent-open-code
+export REPO_ROOT=~/vymo/workiq/oncall-ai-agent-open-code
 ```
 
 ## Shared Metro Pattern
@@ -96,20 +96,20 @@ export REPO_ROOT=/Users/vinaykumar/vymo/workiq/oncall-ai-agent-open-code
 Prefer the bundled helper scripts:
 
 ```sh
-/Users/vinaykumar/vymo/workiq/oncall-ai-agent-open-code/.opencode/skills/vymo-runtime/scripts/create-session-dirs.sh
-/Users/vinaykumar/vymo/workiq/oncall-ai-agent-open-code/.opencode/skills/vymo-runtime/scripts/check-metro.sh
+~/vymo/workiq/oncall-ai-agent-open-code/.opencode/skills/vymo-runtime/scripts/create-session-dirs.sh
+~/vymo/workiq/oncall-ai-agent-open-code/.opencode/skills/vymo-runtime/scripts/check-metro.sh
 ```
 
 If shared Metro is not healthy, start it with:
 
 ```sh
-/Users/vinaykumar/vymo/workiq/oncall-ai-agent-open-code/.opencode/skills/vymo-runtime/scripts/start-metro.sh
+~/vymo/workiq/oncall-ai-agent-open-code/.opencode/skills/vymo-runtime/scripts/start-metro.sh
 ```
 
 Stop it only for explicit cleanup or recovery:
 
 ```sh
-/Users/vinaykumar/vymo/workiq/oncall-ai-agent-open-code/.opencode/skills/vymo-runtime/scripts/stop-metro.sh
+~/vymo/workiq/oncall-ai-agent-open-code/.opencode/skills/vymo-runtime/scripts/stop-metro.sh
 ```
 
 The helper scripts manage:
@@ -218,8 +218,8 @@ yarn pod-install
 - ABC debug bundle id in project: `com.getvymo.iosabc`
 - ABC staging bundle id in project: `com.getvymo.iosabc.enterprise`
 - Debug product name in project file: `Vymo Debug`
-- Primary Xcode workspace path: `/Users/vinaykumar/vymo/react-app/iOS/Vymo.xcworkspace`
-- Xcode project path: `/Users/vinaykumar/vymo/react-app/iOS/Vymo.xcodeproj`
+- Primary Xcode workspace path: `~/vymo/react-app/iOS/Vymo.xcworkspace`
+- Xcode project path: `~/vymo/react-app/iOS/Vymo.xcodeproj`
 
 ## Reporting Requirements
 

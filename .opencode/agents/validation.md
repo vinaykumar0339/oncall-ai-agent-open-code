@@ -15,7 +15,9 @@ permission:
   edit: deny
   bash:
     "*": ask
-    "/Users/vinaykumar/vymo/workiq/oncall-ai-agent-open-code/.opencode/skills/vymo-runtime/scripts/*": allow
+    ".opencode/skills/vymo-runtime/scripts/*": allow
+    "./.opencode/skills/vymo-runtime/scripts/*": allow
+    "~/vymo/workiq/oncall-ai-agent-open-code/.opencode/skills/vymo-runtime/scripts/*": allow
     "pwd": allow
     "ls*": allow
     "find *": allow
@@ -30,8 +32,6 @@ permission:
     "mkdir ./tmp*": allow
     "mkdir -p tmp*": allow
     "mkdir -p ./tmp*": allow
-    "mkdir /Users/vinaykumar/vymo/workiq/oncall-ai-agent-open-code/tmp*": allow
-    "mkdir -p /Users/vinaykumar/vymo/workiq/oncall-ai-agent-open-code/tmp*": allow
     "git status*": allow
     "git diff*": allow
     "git log *": allow
@@ -43,7 +43,8 @@ permission:
     "yarn *": allow
     "npm *": allow
     "npx react-native *": allow
-    "/Users/vinaykumar/vymo/android-base/gradlew *": allow
+    "./gradlew *": allow
+    "~/vymo/android-base/gradlew *": allow
     "adb *": allow
     "emulator *": allow
     "bundle exec pod *": allow
@@ -79,8 +80,8 @@ Primary responsibilities:
   - `Vymo`
   - `ABC` (Aditya Birla Capital)
 - Resolve the app root from platform before local runtime work:
-  - `ios` -> `/Users/vinaykumar/vymo/react-app`
-  - `android` -> `/Users/vinaykumar/vymo/android-base`
+  - `ios` -> `~/vymo/react-app`
+  - `android` -> `~/vymo/android-base`
 - For iOS validation, first determine the app kind from verified `react-app/iOS` scheme context, ticket details, or a validated bundle id.
 - Default to the matching debug scheme for validation after the app kind is identified, even when the ticket was reported against a UAT or staging-distributed app.
 - Use the `Vymo` scheme for the default Vymo debug flow.
@@ -109,7 +110,7 @@ Built-in agent usage:
 - Keep `@explore` questions narrow and verification-oriented.
 - Do not use `@general` unless the workflow is explicitly redesigned later.
 - Do not try to invoke built-in `build` or `plan`; they are primary agents, not validation subtasks.
-- When invoking shared runtime scripts for iOS work, set `PLATFORM=ios`, `TICKET_KEY`, and `APP_ROOT=/Users/vinaykumar/vymo/react-app`.
+- When invoking shared runtime scripts for iOS work, set `PLATFORM=ios`, `TICKET_KEY`, and `APP_ROOT=~/vymo/react-app`.
 - Reuse healthy shared Metro for iOS work and do not stop it during routine validation cleanup.
 - For iOS validation evidence, include the exact scheme, configuration, and bundle context used, or note why the intended scheme could not be launched.
 - When staging is selected for iOS validation, record the exact human instruction or verified runtime fact that justified not using debug.

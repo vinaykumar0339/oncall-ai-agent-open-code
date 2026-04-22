@@ -5,7 +5,7 @@ set -eu
 SCRIPT_DIR="$(CDPATH='' cd -- "$(dirname "$0")" && pwd)"
 REPO_ROOT="${REPO_ROOT:-$(CDPATH='' cd -- "${SCRIPT_DIR}/../../../.." && pwd)}"
 RUNTIME_PLATFORM="${RUNTIME_PLATFORM:-${PLATFORM:-ios}}"
-DEFAULT_IOS_APP_ROOT="/Users/vinaykumar/vymo/react-app"
+DEFAULT_IOS_APP_ROOT="${HOME}/vymo/react-app"
 APP_ROOT="${APP_ROOT:-}"
 TICKET_KEY="${TICKET_KEY:-${ISSUE_KEY:-unknown-ticket}}"
 TMP_TICKET_ROOT="${TMP_TICKET_ROOT:-${REPO_ROOT}/tmp/${TICKET_KEY}/${RUNTIME_PLATFORM}}"

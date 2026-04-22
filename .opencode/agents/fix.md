@@ -17,7 +17,9 @@ permission:
   webfetch: ask
   bash:
     "*": ask
-    "/Users/vinaykumar/vymo/workiq/oncall-ai-agent-open-code/.opencode/skills/vymo-runtime/scripts/*": allow
+    ".opencode/skills/vymo-runtime/scripts/*": allow
+    "./.opencode/skills/vymo-runtime/scripts/*": allow
+    "~/vymo/workiq/oncall-ai-agent-open-code/.opencode/skills/vymo-runtime/scripts/*": allow
     "pwd": allow
     "ls*": allow
     "find *": allow
@@ -41,13 +43,12 @@ permission:
     "mkdir ./tmp*": allow
     "mkdir -p tmp*": allow
     "mkdir -p ./tmp*": allow
-    "mkdir /Users/vinaykumar/vymo/workiq/oncall-ai-agent-open-code/tmp*": allow
-    "mkdir -p /Users/vinaykumar/vymo/workiq/oncall-ai-agent-open-code/tmp*": allow
     "npm *": allow
     "pnpm *": allow
     "yarn *": allow
     "npx nx *": allow
-    "/Users/vinaykumar/vymo/android-base/gradlew *": allow
+    "./gradlew *": allow
+    "~/vymo/android-base/gradlew *": allow
     "adb *": allow
     "emulator *": allow
     "xcrun simctl *": allow
@@ -85,8 +86,8 @@ Primary responsibilities:
   - `ios` -> `vymo-runtime`
   - `android` -> `vymo-runtime`
 - Resolve the app root from platform before any runtime command:
-  - `ios` -> `/Users/vinaykumar/vymo/react-app`
-  - `android` -> `/Users/vinaykumar/vymo/android-base`
+  - `ios` -> `~/vymo/react-app`
+  - `android` -> `~/vymo/android-base`
 - Use repo-local temp paths under `./tmp/{ticketKey}/{platform}/...` for any local evidence or logs created during verification.
 - Before writing any evidence, logs, or runtime files, create the ticket temp tree with `.opencode/skills/vymo-runtime/scripts/create-session-dirs.sh`.
 
@@ -103,7 +104,7 @@ Built-in agent usage:
 - Keep `@explore` read-only and evidence-focused.
 - Keep `@general` bounded, non-overlapping, and optional.
 - Do not try to invoke built-in `build` or `plan`; they are primary agents for manual direct workflows, not subagents in this Jira workflow.
-- When invoking shared runtime scripts for iOS work, set `PLATFORM=ios`, `TICKET_KEY`, and `APP_ROOT=/Users/vinaykumar/vymo/react-app`.
+- When invoking shared runtime scripts for iOS work, set `PLATFORM=ios`, `TICKET_KEY`, and `APP_ROOT=~/vymo/react-app`.
 - Reuse healthy shared Metro for iOS work and do not stop it unless recovery or explicit cleanup is required.
 - Treat ticket mentions of `staging` or `uat` as report context, not as an automatic instruction to use the staging iOS scheme during local verification.
 - Default iOS local verification to the matching debug scheme unless a human instruction or verified runtime evidence shows the issue is specific to the staging or enterprise app.

@@ -2,8 +2,8 @@
 
 ## Workspace
 
-- App root: `/Users/vinaykumar/vymo/android-base`
-- Native Android workspace root: `/Users/vinaykumar/vymo/android-base`
+- App root: `~/vymo/android-base`
+- Native Android workspace root: `~/vymo/android-base`
 - Preferred command runner: `./gradlew`
 
 ## Ticket Temp Layout
@@ -24,7 +24,7 @@ Create the repo-local temp ticket tree before writing artifacts:
 ```sh
 export PLATFORM=android
 export TICKET_KEY=<jira-ticket-key>
-/Users/vinaykumar/vymo/workiq/oncall-ai-agent-open-code/.opencode/skills/vymo-runtime/scripts/create-session-dirs.sh
+~/vymo/workiq/oncall-ai-agent-open-code/.opencode/skills/vymo-runtime/scripts/create-session-dirs.sh
 ```
 
 That helper is shared for repo-local ticket artifacts only. It does not imply that Android uses Metro or the React Native runtime model.
@@ -34,12 +34,12 @@ That helper is shared for repo-local ticket artifacts only. It does not imply th
 Prefer Maestro MCP for launch and verification flows whenever it can replace direct `adb` usage reliably.
 When the steps are already known up front, prefer Maestro MCP `runFlow` to execute the full Android path in one pass.
 
-Run these from `/Users/vinaykumar/vymo/android-base`.
+Run these from `~/vymo/android-base`.
 
 - Inspect available Gradle tasks first:
 
 ```sh
-/Users/vinaykumar/vymo/android-base/gradlew tasks
+./gradlew tasks
 ```
 
 - Determine the Android app kind from verified flavor, client, or application id context before choosing a build target.
@@ -56,13 +56,13 @@ Run these from `/Users/vinaykumar/vymo/android-base`.
 Documented examples from the repo README:
 
 ```sh
-/Users/vinaykumar/vymo/android-base/gradlew assembleBetaMasterDebug
-/Users/vinaykumar/vymo/android-base/gradlew assembleAbcMasterDebug
-/Users/vinaykumar/vymo/android-base/gradlew assembleVymo_2_0MasterFeature_testing
-/Users/vinaykumar/vymo/android-base/gradlew assembleVymo_2_0MasterRelease
-/Users/vinaykumar/vymo/android-base/gradlew bundleVymo_2_0MasterRelease
-/Users/vinaykumar/vymo/android-base/gradlew assembleAbcMasterRelease
-/Users/vinaykumar/vymo/android-base/gradlew bundleAbcMasterRelease
+./gradlew assembleBetaMasterDebug
+./gradlew assembleAbcMasterDebug
+./gradlew assembleVymo_2_0MasterFeature_testing
+./gradlew assembleVymo_2_0MasterRelease
+./gradlew bundleVymo_2_0MasterRelease
+./gradlew assembleAbcMasterRelease
+./gradlew bundleAbcMasterRelease
 ```
 
 ## Variant Selection
@@ -84,24 +84,24 @@ Use these app-target defaults unless the ticket or verified runtime context says
 Variant-specific build commands:
 
 ```sh
-/Users/vinaykumar/vymo/android-base/gradlew assembleBetaMasterDebug
-/Users/vinaykumar/vymo/android-base/gradlew assembleBetaMasterRelease
-/Users/vinaykumar/vymo/android-base/gradlew assembleBetaMasterFeature_testing
-/Users/vinaykumar/vymo/android-base/gradlew assembleVymo_2_0MasterDebug
-/Users/vinaykumar/vymo/android-base/gradlew assembleVymo_2_0MasterRelease
-/Users/vinaykumar/vymo/android-base/gradlew assembleVymo_2_0MasterFeature_testing
-/Users/vinaykumar/vymo/android-base/gradlew assembleWith_call_logMasterDebug
-/Users/vinaykumar/vymo/android-base/gradlew assembleWith_call_logMasterRelease
-/Users/vinaykumar/vymo/android-base/gradlew assembleWith_call_logMasterFeature_testing
-/Users/vinaykumar/vymo/android-base/gradlew assembleWith_incoming_call_logMasterDebug
-/Users/vinaykumar/vymo/android-base/gradlew assembleWith_incoming_call_logMasterRelease
-/Users/vinaykumar/vymo/android-base/gradlew assembleWith_incoming_call_logMasterFeature_testing
-/Users/vinaykumar/vymo/android-base/gradlew assembleAbcMasterDebug
-/Users/vinaykumar/vymo/android-base/gradlew assembleAbcMasterRelease
-/Users/vinaykumar/vymo/android-base/gradlew assembleAbcMasterFeature_testing
-/Users/vinaykumar/vymo/android-base/gradlew assembleVymo_2_0IntuneDebug
-/Users/vinaykumar/vymo/android-base/gradlew assembleVymo_2_0IntuneRelease
-/Users/vinaykumar/vymo/android-base/gradlew assembleVymo_2_0IntuneFeature_testing
+./gradlew assembleBetaMasterDebug
+./gradlew assembleBetaMasterRelease
+./gradlew assembleBetaMasterFeature_testing
+./gradlew assembleVymo_2_0MasterDebug
+./gradlew assembleVymo_2_0MasterRelease
+./gradlew assembleVymo_2_0MasterFeature_testing
+./gradlew assembleWith_call_logMasterDebug
+./gradlew assembleWith_call_logMasterRelease
+./gradlew assembleWith_call_logMasterFeature_testing
+./gradlew assembleWith_incoming_call_logMasterDebug
+./gradlew assembleWith_incoming_call_logMasterRelease
+./gradlew assembleWith_incoming_call_logMasterFeature_testing
+./gradlew assembleAbcMasterDebug
+./gradlew assembleAbcMasterRelease
+./gradlew assembleAbcMasterFeature_testing
+./gradlew assembleVymo_2_0IntuneDebug
+./gradlew assembleVymo_2_0IntuneRelease
+./gradlew assembleVymo_2_0IntuneFeature_testing
 ```
 
 ## Package Identity Clues
@@ -125,16 +125,16 @@ Variant-specific build commands:
 If targeted native Android verification is required, inspect the workspace before choosing a command. Common fallbacks include:
 
 ```sh
-/Users/vinaykumar/vymo/android-base/gradlew tasks
-/Users/vinaykumar/vymo/android-base/gradlew :library:assembleDebug
-/Users/vinaykumar/vymo/android-base/gradlew :library:lint
+./gradlew tasks
+./gradlew :library:assembleDebug
+./gradlew :library:lint
 ```
 
 ## Architecture Clues
 
-- Root settings file: `/Users/vinaykumar/vymo/android-base/settings.gradle.kts`
-- Root build file: `/Users/vinaykumar/vymo/android-base/build.gradle.kts`
-- Primary app module path: `/Users/vinaykumar/vymo/android-base/library`
+- Root settings file: `~/vymo/android-base/settings.gradle.kts`
+- Root build file: `~/vymo/android-base/build.gradle.kts`
+- Primary app module path: `~/vymo/android-base/library`
 - Main app namespace in `library/build.gradle.kts`: `in.vymo.android.base`
 - Major module groups: `core`, `features`, `library`, `mediator`, `shared`
 

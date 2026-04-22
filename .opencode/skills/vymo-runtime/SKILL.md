@@ -8,9 +8,9 @@ description: Use when a task needs local runtime setup, app launch guidance, sha
 Use this skill when a task needs local runtime setup or runtime troubleshooting for the app workspaces.
 
 Workspace scope:
-- iOS React Native workspace: `/Users/vinaykumar/vymo/react-app`
-- iOS native dir inside that workspace: `/Users/vinaykumar/vymo/react-app/iOS`
-- Android native workspace: `/Users/vinaykumar/vymo/android-base`
+- iOS React Native workspace: `~/vymo/react-app`
+- iOS native dir inside that workspace: `~/vymo/react-app/iOS`
+- Android native workspace: `~/vymo/android-base`
 
 Platform coverage:
 - `ios`: React Native workspace with iOS-specific launch behavior
