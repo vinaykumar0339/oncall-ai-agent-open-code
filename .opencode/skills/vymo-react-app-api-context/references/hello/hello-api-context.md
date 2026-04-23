@@ -7,6 +7,18 @@ Primary source chain:
 - `vymo/hello/hello.js` builds params and dispatches `FETCH_HELLO_SCREEN_DATA`
 - `vymo/saga/hello.screen.saga.js` calls `DataController.getContainerObject(..., BaseUrls.getHelloCardsUrl(), ...)`
 
+Refresh and lazy-load triggers from code:
+
+- screen pull-to-refresh in `vymo/hello/hello.js` calls `_refresh(true)`
+- `_refresh(...)` always dispatches `FETCH_HELLO_SCREEN_DATA` with `pages=true` and `backlog_limit=true`
+- the same refresh path also resets KRA metrics via `resetKraMetricsApi(true, false)`
+- swipe-driven page changes inside some Hello cards call a card-level `_refreshData(index)`
+- card-level `_refreshData(index)` fetches page data only when `page.computed` is falsy
+- this lazy fetch behavior exists in:
+  - `vymo/hello/activities.card.js`
+  - `vymo/hello/leads.card.v2.js`
+  - `vymo/hello/targets.card.js`
+
 ## Core Hello Calls
 
 - `GET /hello/cards`
@@ -19,6 +31,8 @@ Primary source chain:
 
 - `GET /hello/cards/page`
   - module/card page data (`fetchModulePageData`)
+  - most relevant for swipeable Hello cards such as activities, tasks, leads, workflow, and users
+  - usually triggered after card page swipe when the selected page has `computed !== true`
 - `GET /hello/getKraMetrics`
   - KRA metrics refresh
 - `GET /v2/snapshot/cards`
@@ -35,6 +49,7 @@ Primary source chain:
   - accept/decline/dismiss suggestion action
 - `GET /target`
   - targets card data
+  - in `targets.card.js`, swipe to a target page can lazily call `DataController.fetchTargetPageData(...)` when `page.computed` is falsy
 - `GET /reports/{userCode}/get-goal-charts`
   - goal reports card
 - `GET /users/profile/{userCode}`
@@ -54,11 +69,17 @@ Start with these path substrings:
 
 - `/hello/cards`
 - `/hello/cards/page`
+- `/target`
 - `/hello/v2/quickUpdates`
 - `/hello/card/disposition`
 - `/v2/ess/suggestions`
 - `/v2/snapshot/`
-- `/target`
+
+When the repro requires an explicit user action:
+
+- pull down on the Hello dashboard to force the main `/hello/cards` refresh path
+- swipe horizontally inside a multi-page Hello card and watch for `/hello/cards/page` or `/target`
+- if a page is already computed, a swipe alone may not produce a network call
 
 ## High-Signal Response Fields
 
@@ -76,4 +97,5 @@ Start with these path substrings:
 - Hello can show fallback cards and an error banner when `/hello/cards` fails.
 - Card visibility and ordering can change by feature flags and role config.
 - Not all calls are guaranteed in every session; only inspect APIs relevant to the visible card set.
-
+- A swipe on a card is not itself proof of a bug or missing API activity. The code intentionally skips the page fetch when page data is already marked computed.
+- For swipe-related repros, verify whether the failing page was uncomputed before expecting `/hello/cards/page` or `/target` traffic.

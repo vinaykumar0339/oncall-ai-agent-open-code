@@ -10,6 +10,11 @@ Use this skill when network evidence is needed from `reactotron-mcp` for:
 - Hello screen issues
 - Login and authentication issues
 
+For Hello, this includes:
+
+- screen pull-to-refresh behavior
+- swipe-driven lazy page fetches inside Hello cards
+
 Workspace scope:
 
 - `~/vymo/react-app` only
@@ -36,4 +41,3 @@ Platform scope:
 - Do not paste raw tokens, cookies, or sensitive payloads into Jira comments.
 - Do not assume every endpoint appears in every client configuration; feature flags and roles can suppress specific calls.
 - Keep evidence ticket-local under `./tmp/{ticketKey}/ios/...`.
-

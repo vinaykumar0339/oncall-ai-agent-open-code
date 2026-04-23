@@ -36,6 +36,13 @@ Common card families on hello:
 
 Do not rely on exact card order or exact card presence. The card mix changes by role, config, network state, feature flags, and customer setup.
 
+Interactive behavior that matters during reproduction:
+
+- the full Hello dashboard supports pull-to-refresh
+- some Hello cards are horizontally swipeable
+- swiping a card can change only the visible page, or it can also trigger a lazy API fetch for the new page
+- the lazy API fetch happens only for card pages whose data is not already computed
+
 ## First-Land Behavior
 
 Hello is the default authenticated landing surface in the normal app flow, but it is not guaranteed to be the first screen in every session.
@@ -97,6 +104,8 @@ The hello screen usually has this shape:
 - one long scrollable dashboard body
 - reusable cards separated by spacing rather than hard page boundaries
 - optional floating action button if that feature is enabled
+- pull-to-refresh on the vertical dashboard scroll
+- horizontal swipe inside some cards such as activities, leads, workflow, users, or target-style cards
 
 Hello is a dashboard screen, not a wizard, not a form-first screen, and not a tabbed detail module.
 
@@ -122,3 +131,6 @@ So device-control flows should identify hello by layout pattern and navigation c
 - If Home tab behavior is ambiguous, open the hamburger or More menu and use the `Home` item.
 - If the visible screen has a search header plus a scrollable dashboard of mixed cards, treat that as a strong hello signal.
 - If the app opens to manager dashboard, onboarding home, or performance first, do not mark that as a hello failure until a Home-navigation attempt has been made.
+- When validating refresh behavior, use a downward pull on the main Hello dashboard to force a screen refresh.
+- When validating missing data inside a swipeable card, swipe to the specific page and check whether the card fills in after the lazy fetch path runs.
+- Do not assume every swipe produces a network call. In `react-app`, some Hello cards fetch page data on swipe only when that page is still uncomputed.

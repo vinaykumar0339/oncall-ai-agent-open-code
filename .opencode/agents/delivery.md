@@ -32,8 +32,8 @@ permission:
     "git switch *": allow
     "git stash *": allow
     "git remote*": allow
-    "git commit *": deny
-    "git push *": deny
+    "git commit *": allow
+    "git push *": allow
     "rm *": deny
   webfetch: deny
 ---
