@@ -2,7 +2,7 @@
 description: Plan and implement a focused code fix after an issue has been reproduced or validation has returned actionable failure evidence, then run targeted local verification.
 mode: subagent
 hidden: true
-model: openai/gpt-5.3-codex
+model: openai/gpt-5.4
 temperature: 0.7
 tools:
   atlassian_getJiraIssue: true

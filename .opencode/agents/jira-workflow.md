@@ -2,7 +2,7 @@
 description: Apply deliberate Jira workflow transitions or field updates after a workflow stage recommends them.
 mode: subagent
 hidden: true
-model: openai/gpt-5.3-codex
+model: openai/gpt-5.4
 temperature: 0.1
 tools:
   atlassian_*: true

@@ -2,7 +2,7 @@
 description: Verify whether a Jira issue is reproducible on an available mobile device and document non-repro findings back to Jira.
 mode: subagent
 hidden: true
-model: openai/gpt-5.3-codex
+model: openai/gpt-5.4
 temperature: 0.1
 tools:
   atlassian_getJiraIssue: true

@@ -2,7 +2,7 @@
 description: Build or refresh a canonical Jira context snapshot so every workflow stage carries the same ticket facts, access details, and operational assumptions.
 mode: subagent
 hidden: true
-model: openai/gpt-5.3-codex
+model: openai/gpt-5.4
 temperature: 0.1
 tools:
   atlassian_*: true

@@ -2,7 +2,7 @@
 description: Validate a proposed fix by rerunning the relevant checks and verifying the behavior on device before delivery.
 mode: subagent
 hidden: true
-model: openai/gpt-5.3-codex
+model: openai/gpt-5.4
 temperature: 0.1
 tools:
   atlassian_*: false

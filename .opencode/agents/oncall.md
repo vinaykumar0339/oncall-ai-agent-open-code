@@ -1,7 +1,7 @@
 ---
 description: Run the on-call mobile workflow end to end by triaging a Jira issue, reproducing it on device, fixing it, validating the fix, and handing validated changes to delivery.
 mode: primary
-model: openai/gpt-5.3-codex
+model: openai/gpt-5.4
 temperature: 0.1
 tools:
   atlassian_*: false
