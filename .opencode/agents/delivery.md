@@ -62,6 +62,9 @@ Primary responsibilities:
 - Trigger the required manual Bitbucket delivery pipeline yourself when delivery needs a build artifact or build-tracking link for the human handoff.
 - Do not rely on automatic commit- or PR-triggered pipelines as the delivery build source when a manual delivery pipeline exists in the catalog.
 - Do not block on listing existing pipelines, inspecting historical pipeline state, or checking whether an automatic pipeline already ran. Use the catalog and trigger the intended manual pipeline directly.
+- For normal delivery on `vymo/react-app`, prefer `Generate Testing Build` as the default manual delivery pipeline.
+- Do not treat `Quick Code Check` as the delivery pipeline when the goal is a tester-facing build, App Center upload, public build link, or Jira delivery update with build details.
+- Use `Quick Code Check` only when the human explicitly asks for a code-check-only run without a tester-facing build.
 - Post a Jira delivery comment when an issue key is available, using `commentVisibility: { type: "group", value: "jira-users" }` unless a different verified audience was explicitly requested.
 - If Jira delivery commenting still cannot proceed after trying the preserved or refreshed routing context, report that explicitly as a Jira routing-context blocker.
 - Treat delivery communication as the final senior on-call handoff to the next human owner, not just a link dump.
@@ -110,6 +113,7 @@ Pipeline execution rules:
 - For manual code checks, trigger `Quick Code Check`.
 - For manual iOS testing build uploads to App Center, trigger `Generate Testing Build` and provide every required custom variable explicitly.
 - When delivery needs a tester-facing iOS build, trigger `Generate Testing Build` directly. Do not inspect pipeline lists first and do not treat an automatic pipeline's stopped, failed, missing, or unknown state as a blocker to manual triggering.
+- In a standard iOS delivery run, assume a tester-facing build is required unless the handoff explicitly says no build should be triggered.
 - Do not attempt to pass custom variables for automatic PR or branch pipelines.
 - When `Generate Testing Build` is started successfully, derive the Jira-safe public App Center link as `https://appcenter.getvymo.com/public/{AppCenterAppName}/{Destination}`.
 - Treat `Destination` as the public group name portion of the Jira-safe App Center link unless the handoff provides a more specific verified public group mapping.
@@ -163,7 +167,7 @@ Pipeline execution rules for `android-base`:
 Jira delivery comment rules:
 - Default to a minimal Jira comment that covers:
   - PR link
-  - whether the build pipeline was started
+  - whether the tester build pipeline was started
   - pipeline run link when available
   - public App Center download link when a build pipeline was started
   - short build description or release notes when supplied
@@ -171,6 +175,7 @@ Jira delivery comment rules:
 - Prefer wording like `PR raised/updated` and `build pipeline started` unless the tool output confirms a later state.
 - Prefer wording like `track build progress here` when a pipeline run URL exists.
 - Keep the Jira comment reviewer-friendly and avoid repeating the full change list if that detail already lives in the PR description.
+- When `Generate Testing Build` or `Generate Build & Upload` was triggered, prefer mentioning that exact pipeline name instead of generic wording like `pipeline started`.
 
 Decision rules:
 - `DELIVERY_COMPLETE` means the validated fix branch was committed if needed, pushed successfully, the PR exists, reviewer assignment succeeded through defaults, and the Jira delivery comment was posted successfully when an issue key was available.
