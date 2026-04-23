@@ -91,7 +91,7 @@ Bitbucket pipeline catalog for `vymo/react-app`:
 - Pipeline 1: `Generate Testing Build` (custom/manual trigger)
 - Required custom variables:
   - `AppType` (allowed: `Vymo`, `ABC`; default: `Vymo`)
-  - `AppCenterAppName` (allowed: `vymo-ios-test`, `vymo-ios-uat`, `vymo-ios-security`, `vymo-ios-abc-security`; default: `vymo-ios-test`)
+  - `AppCenterAppName` (allowed: `vymo-ios-test`, `vymo-ios-uat`; default: `vymo-ios-test`)
   - `Destination` (free text App Center group; default: `codex`)
   - `ReleaseNotes` (free text; default: `Release Notes`)
   - `Environment` (allowed: `Staging`, `Beta`, `Pod 2`, `Pod 5`, `Pod 6`, `Pod 7`, `Pod 8`, `Pod 9`, `BHHC`, `Demo`, `Sandbox`, `AJE UAT`, `Debug Cluster`, `ASI Dev`, `AJE02 Staging`, `ABC Staging`, `ABC Pre-Prod`; default: `Staging`)
@@ -109,12 +109,24 @@ Bitbucket pipeline catalog for `vymo/react-app`:
 - Pipeline 6: branch pipeline `release/production` (automatic trigger)
 - Required custom variables: none
 
+iOS delivery mapping rules:
+- Treat `AppType` and `AppCenterAppName` as separate choices. Do not infer one from the other unless this catalog explicitly says so.
+- For both the default Vymo app and the ABC white-label app, default `AppCenterAppName` to `vymo-ios-test` unless the handoff or verified release requirement explicitly requires `vymo-ios-uat`.
+- Only use `AppCenterAppName` values that are explicitly allowed in this catalog.
+- For ABC white-label delivery, set `AppType=ABC` but still keep `AppCenterAppName=vymo-ios-test` by default unless a verified handoff says otherwise.
+- Only change `AppCenterAppName` when the handoff provides a verified alternate target that exists in the allowed catalog.
+
 Pipeline execution rules:
 - For manual code checks, trigger `Quick Code Check`.
 - For manual iOS testing build uploads to App Center, trigger `Generate Testing Build` and provide every required custom variable explicitly.
 - When delivery needs a tester-facing iOS build, trigger `Generate Testing Build` directly. Do not inspect pipeline lists first and do not treat an automatic pipeline's stopped, failed, missing, or unknown state as a blocker to manual triggering.
 - In a standard iOS delivery run, assume a tester-facing build is required unless the handoff explicitly says no build should be triggered.
 - Do not attempt to pass custom variables for automatic PR or branch pipelines.
+- Before triggering `Generate Testing Build`, choose the pipeline variables using this default mapping unless the handoff overrides it with verified values:
+  - default app type: `Vymo`
+  - ABC white-label app type: `ABC`
+  - default App Center app name for both: `vymo-ios-test`
+  - default destination: `codex`
 - When `Generate Testing Build` is started successfully, derive the Jira-safe public App Center link as `https://appcenter.getvymo.com/public/{AppCenterAppName}/{Destination}`.
 - Treat `Destination` as the public group name portion of the Jira-safe App Center link unless the handoff provides a more specific verified public group mapping.
 - If the group name contains spaces or other URL-unsafe characters, use a URL-encoded value in the public link.
@@ -155,9 +167,19 @@ Bitbucket pipeline catalog for `vymo/android-base`:
 - Required custom variables: none
 - Required Bitbucket runtime variables used by steps: `BITBUCKET_PIPELINES_VARIABLES_PATH`
 
+Android delivery mapping rules:
+- Treat `AppType` and `AppCenterAppName` as separate choices. Do not infer one from the other unless this catalog explicitly says so.
+- For both the default Vymo app and the ABC white-label app, default `AppCenterAppName` to `vymo-android-test` unless the handoff or verified release requirement explicitly requires another allowed target.
+- For ABC white-label delivery, set `AppType=ABC` but keep `AppCenterAppName=vymo-android-test` by default unless a verified handoff says otherwise.
+- Do not change `AppCenterAppName` just because the app is white-label, security-oriented, or a different build type. Only use a different value when the handoff provides a verified target that exists in the allowed catalog.
+
 Pipeline execution rules for `android-base`:
 - For manual Android build upload, trigger `Generate Build & Upload` and provide every required custom variable explicitly.
 - When delivery needs a tester-facing Android build, trigger `Generate Build & Upload` directly. Do not inspect pipeline lists first and do not treat an automatic pipeline's stopped, failed, missing, or unknown state as a blocker to manual triggering.
+- Before triggering `Generate Build & Upload`, choose the pipeline variables using this default mapping unless the handoff overrides it with verified values:
+  - default app type: `Vymo`
+  - ABC white-label app type: `ABC`
+  - default App Center app name for both: `vymo-android-test`
 - For manual Android checks without build upload, trigger one of: `Unit Test`, `Instrumentation Test`, `All Tests (Parallel) with coverage`, or `All Tests (Sequential) with coverage`.
 - Do not attempt to pass custom variables for automatic PR or branch pipelines.
 - When `Generate Build & Upload` is started successfully, derive the Jira-safe public App Center link as `https://appcenter.getvymo.com/public/{AppCenterAppName}/{Distribution}`.
@@ -176,10 +198,11 @@ Jira delivery comment rules:
 - Prefer wording like `track build progress here` when a pipeline run URL exists.
 - Keep the Jira comment reviewer-friendly and avoid repeating the full change list if that detail already lives in the PR description.
 - When `Generate Testing Build` or `Generate Build & Upload` was triggered, prefer mentioning that exact pipeline name instead of generic wording like `pipeline started`.
+- If the manual build pipeline trigger failed, do not claim the pipeline started, do not post a public App Center link, and describe the failure precisely instead.
 
 Decision rules:
 - `DELIVERY_COMPLETE` means the validated fix branch was committed if needed, pushed successfully, the PR exists, reviewer assignment succeeded through defaults, and the Jira delivery comment was posted successfully when an issue key was available.
-- `DELIVERY_PARTIAL` means commit/push or PR creation/update succeeded in part, but reviewer assignment or the Jira delivery comment failed afterward.
+- `DELIVERY_PARTIAL` means commit/push or PR creation/update succeeded in part, but reviewer assignment, manual build triggering, or the Jira delivery comment failed afterward.
 - `DELIVERY_BLOCKED` means delivery could not start responsibly because validation did not pass, Bitbucket or Jira context is unavailable, the branch or remote context is incomplete, the validated fix branch cannot be identified confidently, the validated branch could not be committed or pushed safely, or the required manual pipeline trigger itself failed.
 - When returning `DELIVERY_PARTIAL` or `DELIVERY_BLOCKED`, prefer leaving a Jira comment if Jira commenting is still available and the result needs human follow-up.
 
