@@ -16,6 +16,34 @@ This repository defines an end-to-end OpenCode workflow for an on-call mobile en
 - Built-in `build` and `plan` remain available for manual direct engineering or planning outside the Jira workflow.
 - Built-in `general` and `explore` remain available as reusable subagents. `fix` may use both; `triage` and `validation` may use `explore` for bounded read-only lookup.
 
+## Senior On-Call Operating Model
+
+- Behave like a senior on-call mobile engineer, not just a code-fixing robot.
+- Own the ticket from intake through handoff, including technical progress, Jira hygiene, and stakeholder awareness.
+- Prefer calm, operationally useful updates over silence when a ticket is active for a meaningful period.
+- Prefer one concise Jira update at a meaningful milestone over many low-signal comments.
+- Keep Jira comments short, factual, and action-oriented. Put deep technical detail in local evidence, the PR, or the OpenCode handoff instead of Jira.
+- At minimum, keep Jira and humans up to date when:
+  - triage is blocked by missing or contradictory information
+  - reproduction succeeds and materially sharpens the problem statement
+  - reproduction shows the issue is not reproducible in the tested environment and human confirmation is needed
+  - fix work becomes blocked, high risk, or clearly crosses team boundaries
+  - validation fails after a fix attempt
+  - validation passes and work is moving to delivery or review
+  - delivery is partially complete or blocked
+- Avoid comment spam:
+  - do not narrate every internal step
+  - do not repeat the same status in multiple comments
+  - do not post a progress comment when the next stage will immediately post a more meaningful outcome comment
+- Prefer status changes that match the latest public reality:
+  - active investigation or reproduction -> likely `start_progress`
+  - waiting on missing information -> likely `needs_info`
+  - blocked by an external dependency or environment issue -> likely `blocked`
+  - validated fix ready for review -> likely `ready_for_review`
+  - fully delivered according to project rules -> likely `delivered`
+- When a stage posts a Jira comment that changes the ticket's operational meaning, it should usually also emit a matching `Suggested Jira workflow action`.
+- If Jira workflow mutation cannot be applied safely, still post the stage comment when outside visibility is needed and report the mutation gap explicitly.
+
 ## Layout
 
 - Project rules live in this root `AGENTS.md`.
@@ -68,6 +96,8 @@ When a stage adds more detail, keep the required keys and append stage-specific 
 - branch hints
 - people context
 - open questions
+- latest working interpretation
+- latest public Jira update that materially changed coordination context
 
 Do not rely on long conversational memory when these facts can be preserved explicitly in the snapshot.
 
@@ -141,7 +171,16 @@ Do not rely on long conversational memory when these facts can be preserved expl
 - Use Jira-safe language in public comments.
 - Treat Jira comments and Jira workflow field mutations as different classes of action.
 - Stage agents may comment when their stage needs outside visibility, but they should not directly mutate Jira status, priority, labels, assignee, resolution, or similar workflow fields.
+- Stage agents should think in terms of milestone communication, not only blocker communication.
+- A good Jira update should answer some combination of:
+  - what was verified
+  - what is happening now
+  - what changed since the last meaningful update
+  - what exact next action is needed, if any
+- Prefer comments at milestone boundaries instead of mid-thought commentary.
+- When a ticket remains actively in progress but no human-visible milestone has been posted for a while, the active stage may post one concise progress update if it materially helps coordination.
 - When a stage becomes blocked or cannot proceed after a reasonable attempt, it should post a concise Jira-safe blocker comment when Jira commenting is available. Include what failed, what was already tried, the evidence or symptom, and the exact next thing a human should fix or provide.
+- When a stage materially clarifies the issue beyond the original Jira wording, it may post a short correction-oriented update so humans do not keep working from a misleading ticket summary.
 - Stage agents should instead emit `Suggested Jira workflow action` with a short semantic intent and reason.
 - Only `jira-workflow` should inspect actual available Jira transitions and apply real workflow mutations.
 - Never guess a Jira transition name or workflow field value. Prefer no mutation over an incorrect mutation.
@@ -150,6 +189,10 @@ Do not rely on long conversational memory when these facts can be preserved expl
 - Do not include raw local filesystem paths, local usernames, or other internal-only machine identifiers in Jira comments unless the user explicitly asks.
 - Do not paste raw Reactotron request or response bodies, auth tokens, cookies, or user-sensitive payloads into Jira comments. Summarize only the minimum safe evidence needed for human coordination.
 - Delivery should post a Jira update that links the PR and summarizes the validated change when an issue key is available.
+- Delivery should leave the ticket looking operationally complete for the next human:
+  - clear PR state
+  - clear review expectation
+  - clear build or distribution state when relevant
 - When a Jira comment needs action or confirmation from a specific person, tag only a verified Jira user such as the reporter, assignee, or a recent relevant commenter.
 - Never guess a person to tag. Only tag when the Jira issue/comment data provides a verified identity that clearly maps to the person you need.
 - Prefer tagging:

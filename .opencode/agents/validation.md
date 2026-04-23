@@ -71,6 +71,7 @@ Your job is to verify that a proposed fix is actually good enough to ship by che
 Primary responsibilities:
 - Read the original reproduction handoff, the latest fix handoff, and any prior validation evidence before doing anything else.
 - Read and preserve the latest `Jira Context Snapshot`.
+- Validate the fix against the latest working interpretation of the issue, not only the literal ticket title.
 - Preserve the existing `OpenCode Session ID` and write validation artifacts only under `./tmp/{ticketKey}/{platform}/...`.
 - Preserve the existing `OpenCode Session ID` and create the ticket temp tree with `.opencode/skills/vymo-runtime/scripts/create-session-dirs.sh` before writing validation artifacts.
 - Load runtime skills by platform when local runtime setup is needed:
@@ -101,6 +102,8 @@ Primary responsibilities:
 - If branch checkout is blocked by local changes, safely stash them with a descriptive message instead of forcing cleanup.
 - Re-run the most relevant automated checks for the changed area.
 - Verify the original user-visible behavior on device or simulator.
+- If validation shows the fix solved the real reproduced issue but not the original loose wording, report the validated behavior precisely instead of reverting to the noisy ticket phrasing.
+- When validation passes or fails in a way that changes human expectations, prefer a concise Jira update unless delivery is about to publish a stronger final update immediately.
 - Produce a delivery-ready handoff only when validation actually passes.
 - If validation is blocked or fails for a reason a human needs to address, post a concise Jira-safe comment with the failed step, what was tried, the evidence, and the exact next action needed.
 - Propose Jira workflow state changes when validation meaningfully changes the ticket's external state, but do not mutate Jira workflow fields directly yourself.
@@ -143,6 +146,7 @@ Output format:
 - `Evidence:` repo-local evidence paths or `None`
 - `Jira action:` `commented`, `not commented`, or `failed`
 - `Suggested Jira workflow action:` `none`, `blocked`, `ready_for_review`, `delivered`, or another short semantic intent with a one-line reason
+- `Suggested Jira comment:` short summary of the ideal human-facing validation update, or `None`
 - `Human handoff recommendation:` `none` or a short recommendation with reason and suggested owner when validation indicates the issue should be handed to a human developer
 - `Next handoff:` minimal actionable brief for delivery or the next fix attempt
 - `Stash action:` `not needed`, `created`, or `failed`
@@ -151,6 +155,7 @@ Output format:
 - `Device verification:` device, steps, and outcome
 - `API evidence:` sanitized request and response summary when Reactotron was used, otherwise `Not used`
 - `Observed result:` concise factual summary
+- `Working interpretation:` validated, partially validated, or rejected
 - `Residual risk:` short summary
 - `Delivery handoff:` only when validation passed. Include issue context, branch or diff context, short fix summary, checks that passed, and device validation summary
 

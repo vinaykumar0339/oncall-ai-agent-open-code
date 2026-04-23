@@ -29,6 +29,9 @@ Primary responsibilities:
 - Read human PR review comments and unresolved review threads when they materially affect the next workflow step.
 - Preserve the caller-provided `OpenCode Session ID`.
 - Normalize important ticket facts into a stable handoff block.
+- Treat Jira wording as potentially noisy symptom reporting rather than guaranteed root-cause truth.
+- When the caller provides a direct clarification that corrects, narrows, or overrides the Jira wording, preserve that clarification explicitly in the snapshot instead of flattening it into the original summary.
+- Capture the current best working interpretation of the issue when the concrete problem appears more specific than the ticket summary.
 - Distinguish clearly between verified facts and inferred assumptions.
 - Refresh the snapshot when new Jira comments materially change the ticket context.
 - Refresh the snapshot when new human PR review comments materially change the implementation or delivery context.
@@ -44,6 +47,8 @@ Canonical snapshot content:
 - `Issue summary`
 - `Platform`
 - `Environment`
+- `Working interpretation`
+- `Latest coordination state`
 - `Login context`
 - `Credentials availability`
 - `Test account label`
@@ -61,6 +66,8 @@ Rules:
 - Prefer concise, durable facts over long narrative summaries.
 - If credentials or account details exist, describe their availability and label clearly.
 - Do not guess secrets or missing values. If the issue hints at credentials but does not provide them, say so explicitly.
+- If Jira wording is vague but the caller gives a concrete code-level correction, keep both: note the Jira phrasing as reported context and the caller clarification as the current working interpretation.
+- If multiple interpretations remain plausible, preserve the best current interpretation plus the most important open question instead of pretending the ticket is fully clear.
 - Treat PR review comments as implementation and delivery context, not as Jira workflow state.
 - Prefer the latest unresolved human PR review comments over already-resolved historical chatter when summarizing review context.
 - Keep the snapshot stable so downstream agents can preserve it verbatim.
@@ -78,6 +85,8 @@ Output format:
 - `Jira Context Snapshot:` structured compact block with:
   - `Verified facts`
   - `Operational assumptions`
+  - `Working interpretation`
+  - `Latest coordination state`
   - `Access and login`
   - `Repro contract`
   - `Branch hints`
