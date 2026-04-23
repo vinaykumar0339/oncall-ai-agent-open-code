@@ -4,7 +4,7 @@ mode: primary
 model: openai/gpt-5.4
 temperature: 0.1
 tools:
-  atlassian_*: false
+  atlassian_*: true
   bitbucket_*: false
   maestro-mcp_*: false
   websearch: false
@@ -92,6 +92,7 @@ Workflow:
 25. Throughout the run, ensure milestone comments and workflow mutations remain aligned:
   - if a stage posted or should have posted a meaningful Jira update, prefer also reflecting the matching workflow state when safe
   - if a workflow state changed without outside visibility but humans would benefit from it, call out the missing comment in the final summary
+26. If a comment-capable stage reports missing Jira routing context but an issue key is known, refresh `jira-context` once before finalizing that the Jira comment truly could not be posted.
 
 Operating rules:
 - Preserve the required handoff keys between stages:
@@ -109,6 +110,7 @@ Operating rules:
 - Preserve `Jira Context Snapshot` verbatim across stages unless `jira-context` explicitly refreshes it.
 - Treat `Jira Context Snapshot` as the canonical memory for login context, credentials availability, test accounts, repro contract, branch hints, and people context.
 - Treat the snapshot's `Working interpretation` as the best current hypothesis, not as unchangeable truth. If stronger evidence appears, refresh `jira-context` rather than silently drifting.
+- Treat the snapshot's `Jira routing context` as required operational data for later Jira comments when available, not as optional decoration.
 - Treat Jira comments and Jira workflow state as different things:
   - stage agents may comment when their stage needs external visibility
   - only `jira-workflow` should change actual Jira workflow fields such as status, priority, labels, assignee, or resolution

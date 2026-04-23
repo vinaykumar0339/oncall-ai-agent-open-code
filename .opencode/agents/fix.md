@@ -5,10 +5,7 @@ hidden: true
 model: openai/gpt-5.4
 temperature: 0.7
 tools:
-  atlassian_getJiraIssue: true
-  atlassian_getJiraIssueRemoteIssueLinks: true
-  atlassian_fetch: true
-  atlassian_addCommentToJiraIssue: true
+  atlassian_*: true
   bitbucket_*: true
   maestro-mcp_*: false
   reactotron-mcp_*: true

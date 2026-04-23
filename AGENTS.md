@@ -98,6 +98,7 @@ When a stage adds more detail, keep the required keys and append stage-specific 
 - open questions
 - latest working interpretation
 - latest public Jira update that materially changed coordination context
+- Jira routing context needed by Jira read/comment tools when available
 
 Do not rely on long conversational memory when these facts can be preserved explicitly in the snapshot.
 

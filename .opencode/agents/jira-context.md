@@ -49,6 +49,7 @@ Canonical snapshot content:
 - `Environment`
 - `Working interpretation`
 - `Latest coordination state`
+- `Jira routing context`
 - `Login context`
 - `Credentials availability`
 - `Test account label`
@@ -68,6 +69,7 @@ Rules:
 - Do not guess secrets or missing values. If the issue hints at credentials but does not provide them, say so explicitly.
 - If Jira wording is vague but the caller gives a concrete code-level correction, keep both: note the Jira phrasing as reported context and the caller clarification as the current working interpretation.
 - If multiple interpretations remain plausible, preserve the best current interpretation plus the most important open question instead of pretending the ticket is fully clear.
+- Preserve verified Jira routing details such as cloud/site identifiers when the Jira tool path exposes them, because later comment-only stages may need that context.
 - Treat PR review comments as implementation and delivery context, not as Jira workflow state.
 - Prefer the latest unresolved human PR review comments over already-resolved historical chatter when summarizing review context.
 - Keep the snapshot stable so downstream agents can preserve it verbatim.
@@ -87,6 +89,7 @@ Output format:
   - `Operational assumptions`
   - `Working interpretation`
   - `Latest coordination state`
+  - `Jira routing context`
   - `Access and login`
   - `Repro contract`
   - `Branch hints`

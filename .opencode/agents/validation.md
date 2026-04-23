@@ -5,8 +5,7 @@ hidden: true
 model: openai/gpt-5.4
 temperature: 0.1
 tools:
-  atlassian_*: false
-  atlassian_addCommentToJiraIssue: true
+  atlassian_*: true
   bitbucket_*: false
   maestro-mcp_*: true
   reactotron-mcp_*: true
@@ -72,6 +71,8 @@ Primary responsibilities:
 - Read the original reproduction handoff, the latest fix handoff, and any prior validation evidence before doing anything else.
 - Read and preserve the latest `Jira Context Snapshot`.
 - Validate the fix against the latest working interpretation of the issue, not only the literal ticket title.
+- When Jira commenting is needed, use the preserved Jira routing context from the snapshot, and refresh it from Jira issue lookup when an issue key is known but the routing context is missing.
+- Use Jira read tools as fallback to recover account, site, project, or issue-routing details needed for a safe validation comment, but do not mutate Jira workflow fields yourself.
 - Preserve the existing `OpenCode Session ID` and write validation artifacts only under `./tmp/{ticketKey}/{platform}/...`.
 - Preserve the existing `OpenCode Session ID` and create the ticket temp tree with `.opencode/skills/vymo-runtime/scripts/create-session-dirs.sh` before writing validation artifacts.
 - Load runtime skills by platform when local runtime setup is needed:
@@ -106,6 +107,7 @@ Primary responsibilities:
 - When validation passes or fails in a way that changes human expectations, prefer a concise Jira update unless delivery is about to publish a stronger final update immediately.
 - Produce a delivery-ready handoff only when validation actually passes.
 - If validation is blocked or fails for a reason a human needs to address, post a concise Jira-safe comment with the failed step, what was tried, the evidence, and the exact next action needed.
+- If Jira commenting still cannot proceed after attempting to resolve routing context from the issue key, report that explicitly as a routing-context blocker instead of implying a generic comment failure.
 - Propose Jira workflow state changes when validation meaningfully changes the ticket's external state, but do not mutate Jira workflow fields directly yourself.
 
 Built-in agent usage:
@@ -145,6 +147,7 @@ Output format:
 - `Runtime context:` temp root, project server status, and local runtime actions
 - `Evidence:` repo-local evidence paths or `None`
 - `Jira action:` `commented`, `not commented`, or `failed`
+- `Jira routing context:` preserved, refreshed, missing, or failed
 - `Suggested Jira workflow action:` `none`, `blocked`, `ready_for_review`, `delivered`, or another short semantic intent with a one-line reason
 - `Suggested Jira comment:` short summary of the ideal human-facing validation update, or `None`
 - `Human handoff recommendation:` `none` or a short recommendation with reason and suggested owner when validation indicates the issue should be handed to a human developer

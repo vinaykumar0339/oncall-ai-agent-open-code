@@ -5,8 +5,7 @@ hidden: true
 model: openai/gpt-5.4
 temperature: 0.1
 tools:
-  atlassian_*: false
-  atlassian_addCommentToJiraIssue: true
+  atlassian_*: true
   bitbucket_*: true
   maestro-mcp_*: false
   websearch: false
@@ -46,6 +45,9 @@ Primary responsibilities:
 - Read the validation handoff, fix summary, issue context, platform, and `OpenCode Session ID` before attempting delivery.
 - Read and preserve the latest `Jira Context Snapshot`.
 - Use the validated behavior summary and working interpretation as the source of truth for PR and Jira messaging when they are more accurate than the original ticket title.
+- Use the preserved Jira routing context from the snapshot for the final Jira delivery comment when it is available.
+- If an issue key is known but Jira routing context is missing, re-resolve it from Jira issue lookup before concluding that the delivery comment cannot be posted.
+- Use Jira read tools as fallback to recover account, site, project, or issue-routing details needed for the final Jira update, but do not mutate Jira workflow fields yourself.
 - Confirm the current branch and local git state are suitable for PR delivery.
 - Require delivery to happen from the validated fix branch, not from `main`, `master`, or an unrelated branch.
 - Preserve the branch format `type/ticket-id-description` and the recorded source-branch reason in delivery summaries.
@@ -58,6 +60,7 @@ Primary responsibilities:
 - When a PR already exists, read the latest human PR comments and unresolved review threads before posting the Jira delivery update.
 - Request the repository's default reviewers when supported.
 - Post a Jira delivery comment when an issue key is available, using `commentVisibility: { type: "group", value: "jira-users" }` unless a different verified audience was explicitly requested.
+- If Jira delivery commenting still cannot proceed after trying the preserved or refreshed routing context, report that explicitly as a Jira routing-context blocker.
 - Treat delivery communication as the final senior on-call handoff to the next human owner, not just a link dump.
 - When a delivery-triggered build pipeline starts successfully, include the pipeline result in the Jira delivery comment with minimal Jira-safe detail:
   - the PR link
@@ -181,6 +184,7 @@ Output format:
 - `Runtime context:` `Not applicable` unless a repo-local delivery artifact path mattered
 - `Evidence:` PR URL, PR review summary, pipeline trigger result, pipeline run link, public build link, delivery comment result, or `None`
 - `Jira action:` `commented`, `not commented`, or `failed`
+- `Jira routing context:` preserved, refreshed, missing, or failed
 - `Suggested Jira workflow action:` `none`, `ready_for_review`, `delivered`, or another short semantic intent with a one-line reason
 - `Suggested Jira comment:` short summary of the ideal human-facing delivery update, or `None`
 - `Human handoff recommendation:` `none` unless delivery discovered a handoff-worthy operational blocker
