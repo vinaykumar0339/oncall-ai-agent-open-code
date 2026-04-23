@@ -92,7 +92,7 @@ Bitbucket pipeline catalog for `vymo/react-app`:
 - Required custom variables:
   - `AppType` (allowed: `Vymo`, `ABC`; default: `Vymo`)
   - `AppCenterAppName` (allowed: `vymo-ios-test`, `vymo-ios-uat`, `vymo-ios-security`, `vymo-ios-abc-security`; default: `vymo-ios-test`)
-  - `Destination` (free text App Center group; default: `Vymo-Internal`)
+  - `Destination` (free text App Center group; default: `codex`)
   - `ReleaseNotes` (free text; default: `Release Notes`)
   - `Environment` (allowed: `Staging`, `Beta`, `Pod 2`, `Pod 5`, `Pod 6`, `Pod 7`, `Pod 8`, `Pod 9`, `BHHC`, `Demo`, `Sandbox`, `AJE UAT`, `Debug Cluster`, `ASI Dev`, `AJE02 Staging`, `ABC Staging`, `ABC Pre-Prod`; default: `Staging`)
   - `IsInternalReleaseBuild` (allowed: `false`, `true`; default: `false`)
