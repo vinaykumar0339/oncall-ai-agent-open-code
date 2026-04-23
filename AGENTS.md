@@ -11,7 +11,9 @@ This repository defines an end-to-end OpenCode workflow for an on-call mobile en
 - Triage is mandatory unless the user explicitly asks to skip it.
 - Validation is a release gate. Do not treat a plausible fix as shippable until validation passes.
 - Delivery includes both the PR action and the Jira delivery comment. If the PR succeeds but the Jira delivery comment fails, the workflow is only partially complete.
-- Build generation, AppCenter upload, and release packaging are intentionally out of scope for this version.
+- Manual delivery-time build pipeline triggering is in scope when the delivery stage needs a tester-facing build link or pipeline run link for Jira and human handoff.
+- Delivery should use the known Bitbucket pipeline catalog in this repo and trigger the required manual pipeline directly instead of treating pipeline discovery as a prerequisite.
+- Release packaging strategy outside the known delivery pipelines remains out of scope for this version.
 - Jira webhook automation uses one long-lived OpenCode session per Jira ticket and resumes that same session via the stored native OpenCode session id.
 - Built-in `build` and `plan` remain available for manual direct engineering or planning outside the Jira workflow.
 - Built-in `general` and `explore` remain available as reusable subagents. `fix` may use both; `triage` and `validation` may use `explore` for bounded read-only lookup.

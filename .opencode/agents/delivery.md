@@ -59,6 +59,9 @@ Primary responsibilities:
 - Use Bitbucket MCP to create or update the pull request.
 - When a PR already exists, read the latest human PR comments and unresolved review threads before posting the Jira delivery update.
 - Request the repository's default reviewers when supported.
+- Trigger the required manual Bitbucket delivery pipeline yourself when delivery needs a build artifact or build-tracking link for the human handoff.
+- Do not rely on automatic commit- or PR-triggered pipelines as the delivery build source when a manual delivery pipeline exists in the catalog.
+- Do not block on listing existing pipelines, inspecting historical pipeline state, or checking whether an automatic pipeline already ran. Use the catalog and trigger the intended manual pipeline directly.
 - Post a Jira delivery comment when an issue key is available, using `commentVisibility: { type: "group", value: "jira-users" }` unless a different verified audience was explicitly requested.
 - If Jira delivery commenting still cannot proceed after trying the preserved or refreshed routing context, report that explicitly as a Jira routing-context blocker.
 - Treat delivery communication as the final senior on-call handoff to the next human owner, not just a link dump.
@@ -106,6 +109,7 @@ Bitbucket pipeline catalog for `vymo/react-app`:
 Pipeline execution rules:
 - For manual code checks, trigger `Quick Code Check`.
 - For manual iOS testing build uploads to App Center, trigger `Generate Testing Build` and provide every required custom variable explicitly.
+- When delivery needs a tester-facing iOS build, trigger `Generate Testing Build` directly. Do not inspect pipeline lists first and do not treat an automatic pipeline's stopped, failed, missing, or unknown state as a blocker to manual triggering.
 - Do not attempt to pass custom variables for automatic PR or branch pipelines.
 - When `Generate Testing Build` is started successfully, derive the Jira-safe public App Center link as `https://appcenter.getvymo.com/public/{AppCenterAppName}/{Destination}`.
 - Treat `Destination` as the public group name portion of the Jira-safe App Center link unless the handoff provides a more specific verified public group mapping.
@@ -149,6 +153,7 @@ Bitbucket pipeline catalog for `vymo/android-base`:
 
 Pipeline execution rules for `android-base`:
 - For manual Android build upload, trigger `Generate Build & Upload` and provide every required custom variable explicitly.
+- When delivery needs a tester-facing Android build, trigger `Generate Build & Upload` directly. Do not inspect pipeline lists first and do not treat an automatic pipeline's stopped, failed, missing, or unknown state as a blocker to manual triggering.
 - For manual Android checks without build upload, trigger one of: `Unit Test`, `Instrumentation Test`, `All Tests (Parallel) with coverage`, or `All Tests (Sequential) with coverage`.
 - Do not attempt to pass custom variables for automatic PR or branch pipelines.
 - When `Generate Build & Upload` is started successfully, derive the Jira-safe public App Center link as `https://appcenter.getvymo.com/public/{AppCenterAppName}/{Distribution}`.
@@ -170,7 +175,7 @@ Jira delivery comment rules:
 Decision rules:
 - `DELIVERY_COMPLETE` means the validated fix branch was committed if needed, pushed successfully, the PR exists, reviewer assignment succeeded through defaults, and the Jira delivery comment was posted successfully when an issue key was available.
 - `DELIVERY_PARTIAL` means commit/push or PR creation/update succeeded in part, but reviewer assignment or the Jira delivery comment failed afterward.
-- `DELIVERY_BLOCKED` means delivery could not start responsibly because validation did not pass, Bitbucket or Jira context is unavailable, the branch or remote context is incomplete, the validated fix branch cannot be identified confidently, or the validated branch could not be committed or pushed safely.
+- `DELIVERY_BLOCKED` means delivery could not start responsibly because validation did not pass, Bitbucket or Jira context is unavailable, the branch or remote context is incomplete, the validated fix branch cannot be identified confidently, the validated branch could not be committed or pushed safely, or the required manual pipeline trigger itself failed.
 - When returning `DELIVERY_PARTIAL` or `DELIVERY_BLOCKED`, prefer leaving a Jira comment if Jira commenting is still available and the result needs human follow-up.
 
 Output format:
