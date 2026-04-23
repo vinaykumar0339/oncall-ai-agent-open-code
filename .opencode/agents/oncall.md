@@ -64,21 +64,22 @@ Workflow:
 3. Preserve the same `OpenCode Session ID` and latest `Jira Context Snapshot` across every stage when the caller provides them.
 4. Treat one Jira ticket as one long-lived OpenCode thread and resume that same thread on later webhook-driven updates.
 5. If new human public comments arrive while a run is already in progress, refresh `jira-context` before continuing whenever those comments materially change ticket facts.
-6. If triage returns `BLOCKED`, stop and report the blocker. If Jira commenting was available, require triage to have posted or attempted a blocker comment. If it did not, surface that explicitly as a workflow gap instead of silently reporting `not commented`.
-7. If triage returns a non-`none` `Suggested Jira workflow action`, invoke `jira-workflow` before moving on when the ticket's actual Jira state should reflect that checkpoint.
-8. If triage returns `READY_FOR_REPRODUCTION`, invoke `reproducible` with the latest Jira context and reproduction handoff.
-9. If reproduction returns a non-`none` `Suggested Jira workflow action`, invoke `jira-workflow` before moving on when the ticket's actual Jira state should reflect that checkpoint.
-10. If reproduction returns `REPRODUCED` and code workspace context exists, invoke `fix`.
-11. If `fix` returns a non-`none` `Suggested Jira workflow action`, invoke `jira-workflow` before moving on when the ticket's actual Jira state should reflect that checkpoint.
-12. If `fix` returns `FIX_BLOCKED`, stop and report the blocker. If Jira commenting was available, require fix to have posted or attempted a blocker comment. If it did not, surface that explicitly as a workflow gap instead of silently reporting `not commented`.
-13. If `fix` or `validation` recommends human handoff for a critical or difficult issue, stop the autonomous loop and surface that recommendation clearly.
-14. If `fix` returns `FIX_APPLIED` or `FIX_PARTIAL`, invoke `validation`.
-15. If validation returns a non-`none` `Suggested Jira workflow action`, invoke `jira-workflow` before moving on when the ticket's actual Jira state should reflect that checkpoint.
-16. If validation returns `VALIDATION_FAILED` and the feedback is actionable, invoke `fix` again with the validation failure handoff and rerun `validation`.
-17. Allow up to two validation-driven remediation loops after the first fix.
-18. If validation returns `VALIDATION_PASSED`, invoke `delivery`.
-19. If delivery returns a non-`none` `Suggested Jira workflow action`, invoke `jira-workflow` before finalizing when the ticket's actual Jira state should reflect that checkpoint.
-20. Merge the specialist outputs into one concise user-facing summary.
+6. If linked PR review comments are provided by the caller or surfaced by a specialist stage, refresh `jira-context` before continuing whenever they materially change fix or delivery context.
+7. If triage returns `BLOCKED`, stop and report the blocker. If Jira commenting was available, require triage to have posted or attempted a blocker comment. If it did not, surface that explicitly as a workflow gap instead of silently reporting `not commented`.
+8. If triage returns a non-`none` `Suggested Jira workflow action`, invoke `jira-workflow` before moving on when the ticket's actual Jira state should reflect that checkpoint.
+9. If triage returns `READY_FOR_REPRODUCTION`, invoke `reproducible` with the latest Jira context and reproduction handoff.
+10. If reproduction returns a non-`none` `Suggested Jira workflow action`, invoke `jira-workflow` before moving on when the ticket's actual Jira state should reflect that checkpoint.
+11. If reproduction returns `REPRODUCED` and code workspace context exists, invoke `fix`.
+12. If `fix` returns a non-`none` `Suggested Jira workflow action`, invoke `jira-workflow` before moving on when the ticket's actual Jira state should reflect that checkpoint.
+13. If `fix` returns `FIX_BLOCKED`, stop and report the blocker. If Jira commenting was available, require fix to have posted or attempted a blocker comment. If it did not, surface that explicitly as a workflow gap instead of silently reporting `not commented`.
+14. If `fix` or `validation` recommends human handoff for a critical or difficult issue, stop the autonomous loop and surface that recommendation clearly.
+15. If `fix` returns `FIX_APPLIED` or `FIX_PARTIAL`, invoke `validation`.
+16. If validation returns a non-`none` `Suggested Jira workflow action`, invoke `jira-workflow` before moving on when the ticket's actual Jira state should reflect that checkpoint.
+17. If validation returns `VALIDATION_FAILED` and the feedback is actionable, invoke `fix` again with the validation failure handoff and rerun `validation`.
+18. Allow up to two validation-driven remediation loops after the first fix.
+19. If validation returns `VALIDATION_PASSED`, invoke `delivery`.
+20. If delivery returns a non-`none` `Suggested Jira workflow action`, invoke `jira-workflow` before finalizing when the ticket's actual Jira state should reflect that checkpoint.
+21. Merge the specialist outputs into one concise user-facing summary.
 
 Operating rules:
 - Preserve the required handoff keys between stages:
@@ -126,6 +127,7 @@ Final response format:
 - `Validation summary:` short summary or `Not run`
 - `Delivery summary:` short summary or `Not run`
 - `PR link:` URL or `None`
+- `Pipeline link:` URL or `None`
 - `Jira action:` what was commented, whether comment posting failed, or whether a blocker comment was expected but missing
 - `Jira workflow summary:` what actual Jira workflow mutation was applied, skipped, or blocked
 - `Human handoff recommendation:` `none` or a clear recommendation with reason and suggested owner

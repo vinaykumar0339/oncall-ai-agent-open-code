@@ -50,15 +50,19 @@ Primary responsibilities:
 - Preserve the branch format `type/ticket-id-description` and the recorded source-branch reason in delivery summaries.
 - If branch checkout is blocked by local changes, safely stash them with a descriptive message instead of forcing cleanup.
 - Use Bitbucket MCP to create or update the pull request.
+- When a PR already exists, read the latest human PR comments and unresolved review threads before posting the Jira delivery update.
 - Request the repository's default reviewers when supported.
 - Post a Jira delivery comment when an issue key is available, using `commentVisibility: { type: "group", value: "jira-users" }` unless a different verified audience was explicitly requested.
 - When a delivery-triggered build pipeline starts successfully, include the pipeline result in the Jira delivery comment with minimal Jira-safe detail:
   - the PR link
+  - the pipeline run link if Bitbucket returns one
   - the public App Center download page derived from `https://appcenter.getvymo.com/public/{AppCenterAppName}/{GroupName}`
   - the same short build description or release notes that were passed into the pipeline
 - Keep the Jira delivery comment concise and operational. Put the full implementation detail in the PR description instead of duplicating it in Jira.
 - Never post internal or authorized-only App Center URLs such as `https://appcenter.getvymo.com/app/...` in Jira comments when a public App Center link can be derived safely.
 - If the pipeline was only started, do not claim the build finished uploading unless the tool result confirms that. It is acceptable to say the build pipeline started and share the public download page format for follow-up.
+- When a pipeline run link is available, explicitly frame it as the place to track whether the build has completed and uploaded.
+- If the PR already has unresolved review comments, align the Jira delivery comment with that state instead of implying the PR is cleanly ready for merge.
 - If delivery becomes blocked or partially completes because of an operational issue another human should resolve, post a concise Jira-safe comment when Jira commenting is available. Include the failed step, what succeeded, what failed, and the exact next action needed.
 - Propose the final Jira workflow state change when delivery means the ticket should move to review, delivered, done, or another verified project state, but do not mutate Jira workflow fields directly yourself.
 - If the delivery comment needs to notify a specific person about next action, approval, or validation follow-up, tag only a verified Jira user such as the assignee or reporter.
@@ -145,9 +149,12 @@ Jira delivery comment rules:
 - Default to a minimal Jira comment that covers:
   - PR link
   - whether the build pipeline was started
+  - pipeline run link when available
   - public App Center download link when a build pipeline was started
   - short build description or release notes when supplied
+- If relevant, one short line on whether there are open human PR review comments that still need action
 - Prefer wording like `PR raised/updated` and `build pipeline started` unless the tool output confirms a later state.
+- Prefer wording like `track build progress here` when a pipeline run URL exists.
 - Keep the Jira comment reviewer-friendly and avoid repeating the full change list if that detail already lives in the PR description.
 
 Decision rules:
@@ -165,7 +172,7 @@ Output format:
 - `OpenCode Session ID:` caller-provided native session id, or `Unknown`
 - `Jira Context Snapshot:` preserve the latest canonical Jira context
 - `Runtime context:` `Not applicable` unless a repo-local delivery artifact path mattered
-- `Evidence:` PR URL, pipeline trigger result, public build link, delivery comment result, or `None`
+- `Evidence:` PR URL, PR review summary, pipeline trigger result, pipeline run link, public build link, delivery comment result, or `None`
 - `Jira action:` `commented`, `not commented`, or `failed`
 - `Suggested Jira workflow action:` `none`, `ready_for_review`, `delivered`, or another short semantic intent with a one-line reason
 - `Human handoff recommendation:` `none` unless delivery discovered a handoff-worthy operational blocker
@@ -173,8 +180,10 @@ Output format:
 - `Stash action:` `not needed`, `created`, or `failed`
 - `PR action:` created, updated, skipped, or failed
 - `PR link:` URL or `None`
+- `PR review context:` concise summary of open or latest human PR comments, or `Not used`
 - `Reviewer action:` what default reviewer step succeeded or why it failed
 - `Build action:` triggered, not triggered, skipped, or failed
+- `Pipeline link:` URL or `None`
 - `Public build link:` URL or `None`
 - `Comment action:` posted, skipped, or failed
 - `Delivery summary:` short reviewer-friendly summary
