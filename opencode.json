@@ -36,7 +36,7 @@
     "skill": {
       "*": "deny"
     },
-    "atlassian_*": "deny",
+    "atlassian_*": "allow",
     "maestro-mcp_*": "deny",
     "bitbucket_*": "deny",
     "reactotron-mcp_*": "deny",

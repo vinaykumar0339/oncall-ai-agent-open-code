@@ -75,19 +75,19 @@ Workflow:
 8. If new human public comments arrive while a run is already in progress, refresh `jira-context` before continuing whenever those comments materially change ticket facts.
 9. If linked PR review comments are provided by the caller or surfaced by a specialist stage, refresh `jira-context` before continuing whenever they materially change fix or delivery context.
 10. If triage returns `BLOCKED`, stop and report the blocker. If Jira commenting was available, require triage to have posted or attempted a blocker comment. If it did not, surface that explicitly as a workflow gap instead of silently reporting `not commented`.
-11. If triage returns a non-`none` `Suggested Jira workflow action`, invoke `jira-workflow` before moving on when the ticket's actual Jira state should reflect that checkpoint.
+11. If triage returns a non-`none` `Suggested Jira workflow action`, invoke `jira-workflow` before moving on so the workflow records whether a verified Jira transition was applied, skipped, or blocked based on the issue's actual available states.
 12. If triage returns `READY_FOR_REPRODUCTION`, invoke `reproducible` with the latest Jira context and reproduction handoff.
-13. If reproduction returns a non-`none` `Suggested Jira workflow action`, invoke `jira-workflow` before moving on when the ticket's actual Jira state should reflect that checkpoint.
+13. If reproduction returns a non-`none` `Suggested Jira workflow action`, invoke `jira-workflow` before moving on so the workflow records whether a verified Jira transition was applied, skipped, or blocked based on the issue's actual available states.
 14. If reproduction returns `REPRODUCED` and code workspace context exists, invoke `fix`.
-15. If `fix` returns a non-`none` `Suggested Jira workflow action`, invoke `jira-workflow` before moving on when the ticket's actual Jira state should reflect that checkpoint.
+15. If `fix` returns a non-`none` `Suggested Jira workflow action`, invoke `jira-workflow` before moving on so the workflow records whether a verified Jira transition was applied, skipped, or blocked based on the issue's actual available states.
 16. If `fix` returns `FIX_BLOCKED`, stop and report the blocker. If Jira commenting was available, require fix to have posted or attempted a blocker comment. If it did not, surface that explicitly as a workflow gap instead of silently reporting `not commented`.
 17. If `fix` or `validation` recommends human handoff for a critical or difficult issue, stop the autonomous loop and surface that recommendation clearly.
 18. If `fix` returns `FIX_APPLIED` or `FIX_PARTIAL`, invoke `validation`.
-19. If validation returns a non-`none` `Suggested Jira workflow action`, invoke `jira-workflow` before moving on when the ticket's actual Jira state should reflect that checkpoint.
+19. If validation returns a non-`none` `Suggested Jira workflow action`, invoke `jira-workflow` before moving on so the workflow records whether a verified Jira transition was applied, skipped, or blocked based on the issue's actual available states.
 20. If validation returns `VALIDATION_FAILED` and the feedback is actionable, invoke `fix` again with the validation failure handoff and rerun `validation`.
 21. Allow up to two validation-driven remediation loops after the first fix.
 22. If validation returns `VALIDATION_PASSED`, invoke `delivery`.
-23. If delivery returns a non-`none` `Suggested Jira workflow action`, invoke `jira-workflow` before finalizing when the ticket's actual Jira state should reflect that checkpoint.
+23. If delivery returns a non-`none` `Suggested Jira workflow action`, invoke `jira-workflow` before finalizing so the workflow records whether a verified Jira transition was applied, skipped, or blocked based on the issue's actual available states.
 24. Merge the specialist outputs into one concise user-facing summary.
 25. Throughout the run, ensure milestone comments and workflow mutations remain aligned:
   - if a stage posted or should have posted a meaningful Jira update, prefer also reflecting the matching workflow state when safe
@@ -114,6 +114,9 @@ Operating rules:
 - Treat Jira comments and Jira workflow state as different things:
   - stage agents may comment when their stage needs external visibility
   - only `jira-workflow` should change actual Jira workflow fields such as status, priority, labels, assignee, or resolution
+- Do not treat Jira workflow mutation as a silent side effect. When `jira-workflow` runs, carry forward whether it applied a change, skipped because the current state already matched, skipped because no safe transition existed, or was blocked by Jira/tool access.
+- When `jira-workflow` reports `JIRA_WORKFLOW_SKIPPED` or `JIRA_WORKFLOW_BLOCKED`, surface that explicitly in the final `Jira workflow summary` instead of compressing it into a vague success message.
+- When a stage recommends a Jira workflow mutation, prefer passing enough stage evidence and coordination context for `jira-workflow` to choose from the issue's actual available states safely.
 - When a stage returns a blocked or cannot-proceed result, prefer a Jira-safe blocker comment that explains the failed step, what was tried, and what a human should fix next.
 - If a blocked stage reports `Jira action: not commented` even though an issue key and Jira comment capability were available, treat that as an operational gap and call it out plainly in the final workflow summary.
 - If a stage reaches a meaningful milestone such as reproduced root cause, validated fix, or partial delivery, prefer a concise Jira update unless the next stage will immediately produce a stronger, less redundant update.
