@@ -152,6 +152,7 @@ Before launching iOS, make sure the repo config matches the intended environment
 
 - Default assumption: use `DEBUG` for reproduce, fix verification, and validation, even when the ticket was reported against a UAT or staging-distributed app
 - Treat ticket mentions of `staging` or `uat` as report context, not as an automatic reason to launch `Vymo-Staging` or `ABC Stellar - Staging`
+- If the ticket or verified runtime context does not identify a white-label app, hard default the app kind to `Vymo`
 - Only choose a staging scheme when a human instruction or verified runtime evidence shows the issue is specific to `Vymo-Staging`, `ABC Stellar - Staging`, `com.getvymo.ios.enterprise`, or `com.getvymo.iosabc.enterprise`
 - Run `yarn config-prepare DEBUG` before `Vymo` or `ABC Stellar`
 - Run `yarn config-prepare STAGING` before `Vymo-Staging` or `ABC Stellar - Staging`

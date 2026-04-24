@@ -43,6 +43,7 @@ Run these from `~/vymo/android-base`.
 ```
 
 - Determine the Android app kind from verified flavor, client, or application id context before choosing a build target.
+- If the ticket or verified runtime context does not identify a white-label app, hard default the app kind to `Vymo`.
 - Prefer the matching debug variant first after the app kind is identified, unless the ticket or verified runtime context explicitly requires another variant.
 - Use `betaMasterDebug` for the default Vymo app debug flow.
 - Use `abcMasterDebug` for the ABC white-label debug flow.

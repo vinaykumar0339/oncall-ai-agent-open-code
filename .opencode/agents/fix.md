@@ -120,6 +120,7 @@ Built-in agent usage:
 - For `react-app` iOS local verification, default to Metro + launching the installed app; do not trigger full rebuild/install for JS/TS-only fixes.
 - Rebuild/install only when native change context is verified (`react-app/iOS` or Pod/native dependency/scheme-bundle changes) or when the app is not installed.
 - Treat ticket mentions of `staging` or `uat` as report context, not as an automatic instruction to use the staging iOS scheme during local verification.
+- If the ticket and verified runtime evidence do not identify a white-label app, hard default local verification to the base `Vymo` app.
 - Default iOS local verification to the matching debug scheme unless a human instruction or verified runtime evidence shows the issue is specific to the staging or enterprise app.
 - For iOS React Native debugging, use `reactotron-mcp` when API request and response evidence would help decide whether the fix belongs in the client, the backend contract handling, auth flow, or environment setup.
 - Treat Reactotron output as local debugging evidence and keep any summary sanitized. Do not paste raw sensitive payloads into Jira comments or public handoffs.

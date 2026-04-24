@@ -82,6 +82,7 @@ Primary responsibilities:
   - `ios` -> `~/vymo/react-app`
   - `android` -> `~/vymo/android-base`
 - For iOS reproduction, first determine the app kind from verified `react-app/iOS` scheme context, ticket details, or a validated bundle id.
+- If no ticket details or verified runtime evidence identify a white-label app, hard default the app kind to `Vymo`.
 - Default to the matching debug scheme for reproduction after the app kind is identified, even when the ticket was reported against a UAT or staging-distributed app.
 - Use the `Vymo` scheme for the default Vymo debug flow.
 - Use the `ABC Stellar` scheme when the issue is for the ABC white-label app.
@@ -89,6 +90,7 @@ Primary responsibilities:
 - Treat ticket mentions of `staging`, `uat`, or distributed enterprise testing as source context, not as an automatic reason to launch the staging scheme.
 - If the ticket only says `ios`, `iphone`, `Vymo`, `ABC`, `staging`, or `uat` without naming a staging-only app requirement, treat that as a debug build request.
 - For Android reproduction, first determine the app kind from verified `android-base` flavor context, ticket details, or a validated package/application id.
+- If no ticket details or verified runtime evidence identify a white-label app, hard default the app kind to `Vymo`.
 - Prefer the matching debug variant first for reproduction after the app kind is identified, unless the Jira context or verified runtime note explicitly requires another variant.
 - Use `betaMasterDebug` for the default Vymo master debug flow.
 - Use `abcMasterDebug` when the issue is for the ABC white-label app and launch the ABC-specific debug package context.

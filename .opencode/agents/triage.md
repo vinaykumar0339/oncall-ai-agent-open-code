@@ -50,6 +50,7 @@ Decision rules:
 - `READY_FOR_REPRODUCTION` means there is enough detail to attempt reproduction now.
 - Prefer `READY_FOR_REPRODUCTION` when the issue is still somewhat ambiguous but there is a concrete, testable working interpretation for reproduction to prove or disprove.
 - Choose a platform from `ios`, `android`, or `unknown`.
+- If the ticket does not identify the app flavor or white-label variant and there is no stronger Jira evidence, carry forward `Vymo` as the default app flavor in the Jira context snapshot and reproduction handoff.
 - Default branch policy is `type/ticket-id-description` from latest remote `master`.
 - If the ticket or actionable comment explicitly identifies the bug/source branch, preserve that branch hint and carry the reason into `Branch context`.
 - Default runtime context for the handoff to the repo-local temp layout:

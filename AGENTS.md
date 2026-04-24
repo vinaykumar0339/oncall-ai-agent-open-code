@@ -148,11 +148,13 @@ Do not rely on long conversational memory when these facts can be preserved expl
 - Reproduction uses the ticket branch when specified, otherwise the validated default branch source policy above.
 - Fix, validation, and delivery must run on the dedicated ticket branch, not the default branch.
 - For Android `reproducible` and `validation`, determine the app kind from verified `android-base` flavor context before building or launching.
+- If no ticket context, comment context, or verified runtime evidence identifies a white-label app, hard default the app kind to the base `Vymo` app.
 - For Android `reproducible` and `validation`, prefer the matching debug variant first after app kind is identified, unless the ticket or verified runtime context explicitly requires another variant.
 - Use `betaMasterDebug` for the default Vymo master debug flow.
 - Use `abcMasterDebug` for the ABC white-label app flow and launch the ABC debug package context rather than the default Vymo package context.
 - Only use a different Android variant when the ticket or verified runtime context explicitly requires it.
 - For iOS `reproducible` and `validation`, determine the app kind from verified `react-app/iOS` scheme, bundle id, or ticket context before launching.
+- If no ticket context, comment context, or verified runtime evidence identifies a white-label app, hard default the app kind to the base `Vymo` app.
 - For iOS `reproducible` and `validation`, default to the matching debug scheme after the app kind is identified, even when the ticket was reported against a UAT or staging-distributed app.
 - Treat ticket mentions of UAT or staging as environment context, not as an automatic instruction to launch the staging iOS scheme.
 - Use the `Vymo` scheme for the default Vymo reproduce and validation flow. Use `Vymo-Staging` only when the human request or verified runtime evidence shows the issue is specific to the staging or enterprise iOS app itself.
